@@ -8,31 +8,6 @@ const char *ssid = "nomeDoWifi";    // Nome da rede wifi
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-void getSite(String url){ // Função para usar o metodo GET em sites
-  // O parametro url deve ser a url completa do site. (Exemplo: "http://site.com/")
-  if (WiFi.status() == WL_CONNECTED) { // Caso a internet esteja conectada
-    HTTPClient http;
-
-    http.begin(url.c_str()); // Inicia a conexão com o site
-   
-    int httpCode = http.GET(); // GET no site (retorna a estrutura html do site)
-
-    if (httpCode > 0) {
-      Serial.print("Codigo de status HTTP: ");
-      Serial.println(httpCode);
-      String payload = http.getString(); 
-      Serial.println(payload);
-    } else { // Quando há um erro, o código de resposta é -1
-      Serial.print("Código de erro: ");
-      Serial.println(httpCode);
-    }
-
-    http.end(); // Encerra a conexão
-  } else {
-    Serial.println("WiFi Disconnected"); // Caso a internet não esteja conectada
-  }
-}
-
 void setup() {
   Serial.begin(115200);
   delay(10);
@@ -61,4 +36,29 @@ void setup() {
 }
 
 void loop() {
+}
+
+void getSite(String url){ // Função para usar o metodo GET em sites
+  // O parametro url deve ser a url completa do site. (Exemplo: "http://site.com/")
+  if (WiFi.status() == WL_CONNECTED) { // Caso a internet esteja conectada
+    HTTPClient http;
+
+    http.begin(url.c_str()); // Inicia a conexão com o site
+   
+    int httpCode = http.GET(); // GET no site (retorna a estrutura html do site)
+
+    if (httpCode > 0) {
+      Serial.print("Codigo de status HTTP: ");
+      Serial.println(httpCode);
+      String payload = http.getString(); 
+      Serial.println(payload);
+    } else { // Quando há um erro, o código de resposta é -1
+      Serial.print("Código de erro: ");
+      Serial.println(httpCode);
+    }
+
+    http.end(); // Encerra a conexão
+  } else {
+    Serial.println("WiFi Disconnected"); // Caso a internet não esteja conectada
+  }
 }
