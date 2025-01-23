@@ -7,7 +7,30 @@ const char *ssid = "nomeDoWifi";    // Nome da rede wifi
 #include <WiFi.h>
 #include "esp_eap_client.h"
 
+// Função para interagir com sites
+void getSite(String url){
+  if (WiFi.status() == WL_CONNECTED) { // Caso a internet esteja conectada
+    HTTPClient http;
 
+    http.begin(url.c_str()); // Inicia a conexão com o site
+   
+    int httpCode = http.GET(); // GET no site (retorna a estrutura html do site)
+
+    if (httpCode > 0) {
+      Serial.print("Codigo de status HTTP: ");
+      Serial.println(httpCode);
+      String payload = http.getString(); 
+      Serial.println(payload);
+    } else { // Quando há um erro, o código de resposta é -1
+      Serial.print("Código de erro: ");
+      Serial.println(httpResponseCode);
+    }
+
+    http.end(); // Encerra a conexão
+  } else {
+    Serial.println("WiFi Disconnected"); // Caso a internet não esteja conectada
+  }
+}
 
 void setup() {
   Serial.begin(115200);
