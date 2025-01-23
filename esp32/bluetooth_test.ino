@@ -1,10 +1,4 @@
-// This example code is in the Public Domain (or CC0 licensed, at your option.)
-// By Evandro Copercini - 2018
-//
-// This example creates a bridge between Serial and Classical Bluetooth (SPP)
-// and also demonstrate that SerialBT have the same functionalities of a normal Serial
-// Note: Pairing is authenticated automatically by this device
-
+// Codigo que exemplifica conexoes bluetooth com a esp32
 #include "BluetoothSerial.h"
 
 String device_name = "ESP32-BT-Slave";
@@ -28,8 +22,8 @@ void setup() {
   Serial.begin(115200);
   pinMode(2, OUTPUT);
   pinMode(4, OUTPUT);
-  SerialBT.begin("ESP32");  //Bluetooth device name
-  //SerialBT.deleteAllBondedDevices(); // Uncomment this to delete paired devices; Must be called after begin
+  SerialBT.begin("ESP32");  // Nome do dispositivo bluetooth
+  //SerialBT.deleteAllBondedDevices(); // Deleta dispositivos pareados
   Serial.printf("The device with name \"%s\" is started.\nNow you can pair it with Bluetooth!\n", device_name.c_str());
 }
 
