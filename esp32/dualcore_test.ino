@@ -7,7 +7,6 @@ void setup() {
   // put your setup code here, to run once:
   pinMode(4, OUTPUT); // Led 1
   pinMode(2, OUTPUT); // Led 2
-  analogReadResolution(12);
   Serial.begin(115200);
 
   xTaskCreatePinnedToCore(Task0code, "loop1", 10000, NULL, 1, &Task0, 0); 
