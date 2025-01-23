@@ -22,7 +22,7 @@ void getSite(String url){ // Função para usar o metodo GET em sites
       Serial.println(payload);
     } else { // Quando há um erro, o código de resposta é -1
       Serial.print("Código de erro: ");
-      Serial.println(httpResponseCode);
+      Serial.println(httpCode);
     }
 
     http.end(); // Encerra a conexão
