@@ -17,10 +17,6 @@ void setup() {
   Serial.println(ssid);
 
   WiFi.disconnect(true);  // Disconecta da internet
-  // esp_eap_client_set_identity((uint8_t *)EAP_IDENTITY, strlen(EAP_IDENTITY));  //provide identity
-  // esp_eap_client_set_username((uint8_t *)EAP_IDENTITY, strlen(EAP_IDENTITY));  //provide username
-  // esp_eap_client_set_password((uint8_t *)EAP_PASSWORD, strlen(EAP_PASSWORD));  //provide password
-  // esp_wifi_sta_enterprise_enable();
 
   WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_IDENTITY, EAP_PASSWORD);  // Conecta a internet
    while (WiFi.status() != WL_CONNECTED) {
