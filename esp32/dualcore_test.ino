@@ -42,5 +42,5 @@ void Task1code(void* pvParameter){
 
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // Não precisa ser utilizado
 }
