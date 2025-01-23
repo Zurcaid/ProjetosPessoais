@@ -9,7 +9,7 @@ const char *ssid = "nomeDoWifi";    // Nome da rede wifi
 #include <HTTPClient.h>
 
 void getSite(String url){ // Função para usar o metodo GET em sites
-  // O parametro url deve ser a url completa do site: "http://site.com/"
+  // O parametro url deve ser a url completa do site. (Exemplo: "http://site.com/")
   if (WiFi.status() == WL_CONNECTED) { // Caso a internet esteja conectada
     HTTPClient http;
 
