@@ -1,8 +1,9 @@
 // Codigo que exemplifica conexoes bluetooth com a esp32
 #include "BluetoothSerial.h"
 
-String device_name = "ESP32-BT-Slave";
+String device_name = "ESP32-Z";
 
+// Verificação de bluetooth da placa, e depois verificação da comunicação serial bluetooth
 // Check if Bluetooth is available
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -22,7 +23,7 @@ void setup() {
   Serial.begin(115200);
   pinMode(2, OUTPUT);
   pinMode(4, OUTPUT);
-  SerialBT.begin("ESP32");  // Nome do dispositivo bluetooth
+  SerialBT.begin(device_name);  // Nome do dispositivo bluetooth
   //SerialBT.deleteAllBondedDevices(); // Deleta dispositivos pareados
   Serial.printf("The device with name \"%s\" is started.\nNow you can pair it with Bluetooth!\n", device_name.c_str());
 }
