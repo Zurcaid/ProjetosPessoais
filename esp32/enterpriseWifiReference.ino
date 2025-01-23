@@ -12,8 +12,7 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
-  Serial.println();
-  Serial.print("Connecting to network: ");
+  Serial.printf("\nConnecting to network: ");
   Serial.println(ssid);
 
   WiFi.disconnect(true);  // Disconecta da internet
@@ -24,11 +23,8 @@ void setup() {
      Serial.print(".");
    }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address set: ");
+  Serial.printf("\nWiFi connected\nIP address set: ");
   Serial.println(WiFi.localIP());  // Imprime o IP privado
-
 }
 
 void loop() {
