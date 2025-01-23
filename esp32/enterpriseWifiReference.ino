@@ -46,8 +46,8 @@ void getSite(String url){ // Função para usar o metodo GET em sites
     if (httpCode > 0) {
       Serial.print("Codigo de status HTTP: ");
       Serial.println(httpCode);
-      String payload = http.getString(); 
-      Serial.println(payload);
+      String conteudo = http.getString(); 
+      Serial.println(conteudo);
     } else { // Quando há um erro, o código de resposta é -1
       Serial.print("Código de erro: ");
       Serial.println(httpCode);
