@@ -1,4 +1,5 @@
-// Codigo para conectar em redes WPA2 
+// Codigo para conectar em redes WPA2
+// Funcao getSite para demonstrar a conexão com a internet com o metodo GET HTTP
 
 #define EAP_IDENTITY "user"  // Nome de usuario
 #define EAP_PASSWORD "senha"  // Senha do usuario
@@ -8,6 +9,7 @@ const char *ssid = "nomeDoWifi";    // Nome da rede wifi
 #include <HTTPClient.h>
 
 void getSite(String url){ // Função para usar o metodo GET em sites
+  // O parametro url deve ser a url completa do site: "http://site.com/"
   if (WiFi.status() == WL_CONNECTED) { // Caso a internet esteja conectada
     HTTPClient http;
 
