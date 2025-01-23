@@ -5,7 +5,7 @@
 const char *ssid = "nomeDoWifi";    // Nome da rede wifi
 
 #include <WiFi.h>
-#include "esp_eap_client.h"
+#include <HTTPClient.h>
 
 void getSite(String url){ // Função para usar o metodo GET em sites
   if (WiFi.status() == WL_CONNECTED) { // Caso a internet esteja conectada
