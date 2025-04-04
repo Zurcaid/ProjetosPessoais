@@ -31,6 +31,9 @@ char *RB = "RB"; // REI BRANCO
 
 char *tabuleiro[8][8];
 
+char jogadaB[] = "";
+char jogadaP[] = "";
+
 void tabuleiroInit(){
 	for(i = 0; i < 8; i++){
 		for(i2 = 0; i2 < 8; i2++){
@@ -76,4 +79,10 @@ void tabuleiroPrint(){
 void main(){
     tabuleiroInit();
     tabuleiroPrint();
+    
+    while(1){
+        printf("Digite a jogada das brancas: ");
+        scanf("%s", &jogadaB);
+        printf("%d", sizeof(jogadaB));
+    }
 }
