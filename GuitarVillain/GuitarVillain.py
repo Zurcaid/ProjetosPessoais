@@ -143,7 +143,7 @@ VerificacaoTecla.start()
 os.system("audacious -pHq /home/zurcaid/Documentos/programasPython/GuitarVillain/musicas/CUBErt.m4a &")
 
 while (screen < len(musica)):
-	print("---------------- SEQUENCIA = x"+str(len(seq)), "- ERROS = x" str(len(erros)))
+	print("---------------- SEQUENCIA = x"+str(len(seq)), "- ERROS = x"+str(len(erros)))
 	for i in range(screen, (screen - 9), -1):
 		print(musica[i])
 	print(musica[screen - 9], "<---")
