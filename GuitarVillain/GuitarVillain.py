@@ -35,7 +35,7 @@ def TeclaPressionada(key):
 				else:
 					pont.pop()
 					seq.clear()
-					erros.append()
+					erros.append(0)
 			elif(j == '3'):
 				if(musicaConfig[screen-9] in b3) or (musicaConfig[screen-8] in b3) or (musicaConfig[screen-10] in b3):
 					pont.append(0)
