@@ -1,5 +1,6 @@
 import time
 from pynput import keyboard
+import os
 
 #Guitar hero no terminal
 
@@ -57,12 +58,17 @@ def TeclaSolta(key):
 	if key.char in teclas:
 		teclas.remove(key.char)
 
+musicaDoc = open("Musica01.txt", "r")
+musicaConfig = musicaDoc.read()
+print(musicaConfig)
+musicaDoc.close()
+musicaConfig = musicaConfig.split(",")
+musicaConfig.pop()
+for i in range(len(musicaConfig)):
+	musicaConfig[i] = int(musicaConfig[i])
 
 #musicaConfig = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 4, 8, 16, 0, 16, 8, 4, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-musicaConfig = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-#musicaConfig = []
-#for i in range(50):
-#	musicaConfig.append(1)
+#musicaConfig = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 # Valores |1|2|4|8|16|
 musica = []
 
