@@ -5,6 +5,8 @@ import os
 #Guitar hero no terminal
 
 pont = []
+seq = []
+erros = []
 teclas = []
 
 b2 = [2, 3, 6, 7, 10, 11, 14, 18, 19, 22, 26]
@@ -21,46 +23,51 @@ def TeclaPressionada(key):
 			if(j == '1'):
 				if(musicaConfig[screen-9]%2 != 0) or (musicaConfig[screen-8]%2 != 0) or (musicaConfig[screen-10]%2 != 0):
 					pont.append(0)
-					print("ACERTOU!")
+					seq.append(0)
 				else:
+					erros.append(0)
 					pont.pop()
-					print("ERROU!")
+					seq.clear()
 			elif(j == '2'):
 				if(musicaConfig[screen-9] in b2) or (musicaConfig[screen-8] in b2) or (musicaConfig[screen-10] in b2):
 					pont.append(0)
-					print("ACERTOU!")
+					seq.append(0)
 				else:
 					pont.pop()
-					print("ERROU!")
+					seq.clear()
+					erros.append()
 			elif(j == '3'):
 				if(musicaConfig[screen-9] in b3) or (musicaConfig[screen-8] in b3) or (musicaConfig[screen-10] in b3):
 					pont.append(0)
-					print("ACERTOU!")
+					seq.append(0)
 				else:
 					pont.pop()
-					print("ERROU!")
+					seq.clear()
+					erros.append(0)
 			elif(j == '4'):
 				if(musicaConfig[screen-9] in b4) or (musicaConfig[screen-8] in b4) or (musicaConfig[screen-10] in b4):
 					pont.append(0)
-					print("ACERTOU!")
+					seq.append(0)
 				else:
 					pont.pop()
-					print("ERROU!")
+					seq.clear()
+					erros.append(0)
 			elif(j == '5'):
 				if(musicaConfig[screen-9] in b5) or (musicaConfig[screen-8] in b5) or (musicaConfig[screen-10] in b5):
 					pont.append(0)
-					print("ACERTOU!")
+					seq.append(0)
 				else:
 					pont.pop()
-					print("ERROU!")
+					seq.clear
+					erros.append(0)
 
 def TeclaSolta(key):
 	if key.char in teclas:
 		teclas.remove(key.char)
 
-musicaDoc = open("Musica01.txt", "r")
+#Config da musica
+musicaDoc = open("/home/zurcaid/Documentos/programasPython/GuitarVillain/musicas/CUBErt.txt", "r")
 musicaConfig = musicaDoc.read()
-print(musicaConfig)
 musicaDoc.close()
 musicaConfig = musicaConfig.split(",")
 musicaConfig.pop()
@@ -68,7 +75,6 @@ for i in range(len(musicaConfig)):
 	musicaConfig[i] = int(musicaConfig[i])
 
 #musicaConfig = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 4, 8, 16, 0, 16, 8, 4, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-#musicaConfig = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 # Valores |1|2|4|8|16|
 musica = []
 
@@ -129,11 +135,15 @@ for i in musicaConfig: # Conversao dos valores pras teclas
 
 VerificacaoTecla = keyboard.Listener(on_press=TeclaPressionada, on_release=TeclaSolta)
 
-screen = 9
+screen = 12
 
 VerificacaoTecla.start()
+
+#Musica
+os.system("audacious -pHq /home/zurcaid/Documentos/programasPython/GuitarVillain/musicas/CUBErt.m4a &")
+
 while (screen < len(musica)):
-	print("----------------")
+	print("---------------- SEQUENCIA = x"+str(len(seq)), "- ERROS = x" str(len(erros)))
 	for i in range(screen, (screen - 9), -1):
 		print(musica[i])
 	print(musica[screen - 9], "<---")
@@ -142,3 +152,5 @@ while (screen < len(musica)):
 	screen += 1
 VerificacaoTecla.stop()
 print("Pontuacao =", len(pont))
+os.system("audacious -s")
+
