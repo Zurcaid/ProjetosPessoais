@@ -37,7 +37,7 @@ int begin(){ // Input inicial do jogador
 	}
 }
 
-void setTroop(int yPos, int xPos, int team, int type, int third, int fourth){
+void setTroop(int yPos, int xPos, int team, int type, int third, int fourth){ // funcao para atualizar uma posicao com as informacoes da tropa
 	config[yPos][xPos][0] = team;
 	config[yPos][xPos][1] = type;
 	config[yPos][xPos][2] = third;
@@ -50,7 +50,7 @@ void userInput(){
 	scanf("%c", &acao);
 }
 
-void updateMap(int startX, int startY){
+void updateMap(int startX, int startY){ // Funcao para atualizar as informacoes exibidas ao jogador
 	//mapa visivel para o jogador, tamanho 16x16
 	int countX = 0;
 	int countY = 0;
@@ -75,14 +75,29 @@ void updateMap(int startX, int startY){
 	}
 }
 
-void dmgEnemy(int posX, int  posY, int dmg, int bulletSize){
-		int enemyDir, enemyDmg, enemyHP, bulletSideSize;
-			if(bulletSize == 1){
+void dmgEnemy(int posX, int  posY, int dmg, int bulletSize, int dirX, int dirY){ // Funcao para diminuir a vida de tropas
+		int enemyDir, enemyDmg, enemyHP, bulletSideSize, troopDir; // Variaveis locais
+		troopDir = config[dirY][dirX][2]/10000;
+		if(bulletSize == 1){
 			enemyDir = config[posY][posX][2]/10000;
 			enemyDmg = (config[posY][posX][2]-(enemyDir*10000))/100;
 			enemyHP = (config[posY][posX][2]-(enemyDir*1000))-(enemyDmg*100);
 			enemyHP = enemyHP - dmg;
 			config[posY][posX][2] = enemyDir + enemyDmg + enemyHP;
+			switch(troopDir){ // Altera a direcao de uma tropa atacada pela posicao do atacante
+				case 1:
+					enemyDir = 3;
+					break;
+				case 2:
+					enemyDir = 4;
+					break;
+				case 3:
+					enemyDir = 1;
+					break;
+				case 4:
+					enemyDir = 2;
+					break;
+			}
 		}else{
 			bulletSideSize = (bulletSize - 1)/2;
 			for(int i = (posY - bulletSideSize); i <= (posY + bulletSideSize); i++){
@@ -92,14 +107,28 @@ void dmgEnemy(int posX, int  posY, int dmg, int bulletSize){
 						enemyDmg = (config[i][i2][2]-(enemyDir*10000))/100;
 						enemyHP = (config[i][i2][2]-(enemyDir*1000))-(enemyDmg*100);
 						enemyHP = enemyHP - dmg;
-						config[i][i2][2] = enemyDir + enemyDmg + enemyHP;
+						switch(troopDir){ // Altera a direcao de uma tropa atacada pela posicao do atacante
+							case 1:
+								enemyDir = 3;
+								break;
+							case 2:
+								enemyDir = 4;
+								break;
+							case 3:
+								enemyDir = 1;
+								break;
+							case 4:
+								enemyDir = 2;
+								break;
+						}
+						config[i][i2][2] = (enemyDir*10000) + (enemyDmg+100) + enemyHP;
 					}
 				}
 			}
 		}
 }
 
-void updateWorldAttacks(){
+void updateWorldAttacks(){ // Funcao para organizar o sistema de alvos e ataques de cada tropa individual
 	int dir, rangeX, sideRangeX, rangeY, dmg, bulletSize, turnUsed;
 	for(int i = cordX; i < (cordX+16); i++){
 		for(int i2 = cordY; i2 < (cordY+16); i2++){
@@ -117,7 +146,7 @@ void updateWorldAttacks(){
 							// Caso tropa esteja virada pra cima
 							for(int i3 = i2; i3 <= (i2 + rangeY); i3++){
 								if((config[i3][i][1] != 0) && (config[i3][i][0] != config[i2][i][0])){
-									dmgEnemy(i3, i, dmg, bulletSize);
+									dmgEnemy(i3, i, dmg, bulletSize, i, i2);
 									turnUsed = 1;
 									break;
 								}
@@ -126,7 +155,7 @@ void updateWorldAttacks(){
 								for(int i3 = i2; i3 <= (i2 + rangeY); i3++){
 									for(int i4 = (i - sideRangeX); i4 <= (i + sideRangeX); i4++){
 										if((config[i3][i4][1] != 0) && (config[i3][i4][0] != config[i2][i][0])){
-											dmgEnemy(i3, i4, dmg, bulletSize);
+											dmgEnemy(i3, i4, dmg, bulletSize, i, i2);
 											turnUsed = 1;
 											break;
 										}
@@ -139,7 +168,7 @@ void updateWorldAttacks(){
 							// Caso tropa esteja virada pra direita
 							for(int i3 = i; i3 <= (i + rangeY); i3++){
 								if((config[i2][i3][1] != 0) && (config[i2][i3][0] != config[i2][i][0])){
-									dmgEnemy(i2, i3, dmg, bulletSize);
+									dmgEnemy(i2, i3, dmg, bulletSize, i, i2);
 									turnUsed = 1;
 									break;
 								}
@@ -148,7 +177,7 @@ void updateWorldAttacks(){
 								for(int i3 = i; i3 <= (i + rangeY); i3++){
 									for(int i4 = (i2 - sideRangeX); i4 <= (i2 + sideRangeX); i4++){
 										if((config[i4][i3][1] != 0) && (config[i4][i3][0] != config[i2][i][0])){
-											dmgEnemy(i4, i3, dmg, bulletSize);
+											dmgEnemy(i4, i3, dmg, bulletSize, i, i2);
 											turnUsed = 1;
 											break;
 										}
@@ -161,7 +190,7 @@ void updateWorldAttacks(){
 							// Caso tropa esteja virada pra baixo
 							for(int i3 = i2; i3 <= (i2 - rangeY); i3 = i3 - 1){
 								if((config[i3][i][1] != 0) && (config[i3][i][0] != config[i2][i][0])){
-									dmgEnemy(i3, i, dmg, bulletSize);
+									dmgEnemy(i3, i, dmg, bulletSize, i, i2);
 									turnUsed = 1;
 									break;
 								}
@@ -170,7 +199,7 @@ void updateWorldAttacks(){
 								for(int i3 = i2; i3 <= (i2 - rangeY); i3 = i3 - 1){
 									for(int i4 = (i - sideRangeX); i4 <= (i + sideRangeX); i4++){
 										if((config[i3][i4][1] != 0) && (config[i3][i4][0] != config[i2][i][0])){
-											dmgEnemy(i3, i4, dmg, bulletSize);
+											dmgEnemy(i3, i4, dmg, bulletSize, i, i2);
 											turnUsed = 1;
 											break;
 										}
@@ -183,7 +212,7 @@ void updateWorldAttacks(){
 							// Caso tropa esteja virada pra esquerda
 							for(int i3 = i; i3 <= (i - rangeY); i3 = i3 - 1){
 								if((config[i2][i3][1] != 0) && (config[i2][i3][0] != config[i2][i][0])){
-									dmgEnemy(i2, i3, dmg, bulletSize);
+									dmgEnemy(i2, i3, dmg, bulletSize, i, i2);
 									turnUsed = 1;
 									break;
 								}
@@ -192,7 +221,7 @@ void updateWorldAttacks(){
 								for(int i3 = i; i3 <= (i - rangeY); i3 = i3 - 1){
 									for(int i4 = (i2 - sideRangeX); i4 <= (i2 + sideRangeX); i4++){
 										if((config[i4][i3][1] != 0) && (config[i4][i3][0] != config[i2][i][0])){
-											dmgEnemy(i4, i3, dmg, bulletSize);
+											dmgEnemy(i4, i3, dmg, bulletSize, i, i2);
 											turnUsed = 1;
 											break;
 										}
@@ -208,7 +237,7 @@ void updateWorldAttacks(){
 	}
 }
 
-void updateWorldTroops(){
+void updateWorldTroops(){ // Funcao para organizar as tropas vivas
 	int troopDir, troopDmg, troopHP;
 	for(int i = cordX; i < (cordX+16); i++){
 		for(int i2 = cordY; i2 < (cordY+16); i2++){
@@ -222,7 +251,7 @@ void updateWorldTroops(){
 	}
 }
 
-void printMap(){
+void printMap(){ // Imprime na tela as informacoes da area escolhida pelo jogador
 	for(int i = 0; i < 16; i++){
 		for(int i2 = 0; i2 < 16; i2++){
 			printf("%c ", mapa[i][i2]);
@@ -231,7 +260,7 @@ void printMap(){
 	}
 }
 
-int savesystem(int op){
+int loadsystem(int op){ // Funcao para carregar jogo salvo ou inicial novo
 	if(!op){
 		// Inicia jogo do zero.
 		// Adiciona tropas iniciais
@@ -255,15 +284,9 @@ void main(){
 			config[i][i2][3] = 0;
 		}
 	}
-	//saveinfo[0] = 1;//savesystem(begin());
 	setTroop(2, 8, 2, 1, 30101, 1004003);
 	setTroop(4, 8, 1, 1, 10101, 1004003);
 	updateMap(0,0);
-	printf("Ola comandante, voce foi enviado para um novo planeta, nomeado X-%d. \n", seed);
-	printf("O seu objetivo e conquistar o planeta completamente, cada vez que desconectar deste terminal o sistema entendera a operacao como \n");
-	printf("encerrada e movera suas bases para outro planeta junto com suas tropas. \n");
-	printf("Boa sorte na missao. \n");
-
 	printMap();
 }
 
