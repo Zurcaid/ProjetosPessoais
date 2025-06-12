@@ -1,3 +1,6 @@
+#ifndef constants
+#define constants
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -45,51 +48,21 @@ class Civilization{
 		
 		vector<string> champions;
 		
-		void changeAlignment(int x){
-			alignment += x;
-		}
-		void changeXp(int x){
-			xp += x;
-		}
+		void changeAlignment(int x);
+		void changeXp(int x);
 		
-		void setTroops(string x, int n){
-			int size = troops.size();
-			int pos = size+1;
-			for(int i = 0; i <= size; i++){
-				if(troops.at(i) == x){
-					pos = i;
-					break;
-				}
-			}
-			if(pos <= size){
-				troopsNum.at(pos) = troopsNum.at(pos) + n;
-			}else{
-				troops.push_back(x);
-				troopsNum.push_back(n);
-			}
-		}
-		void setKind(int x){
-			kind = x;
-		}
-		void setKing(int x){
-			king = x;
-		}
+		void setTroops(string x, int n);
+		void setKind(int x);
+		void setKing(int x);
 		
 };
 
-Civilization Kingdom1;
 
 class King{
 	public:
 		int lvl;
 		int hp = 10;
 		
-		void passive1(){
-		
-		}
-		void skill1(){
-			
-		}
 };
 
 class Champions{
@@ -104,18 +77,11 @@ class Troops{
 		string kingdom;
 		int dmg, hp;
 		
-		void setKingdom(string x){
-		    kingdom = x;
-		}
-		void setDmg(int x){
-		    dmg = x;
-		}
-		void setHp(int x){
-		    hp = x;
-		}
 };
 
 class Buildings{
     public:
         int income;
 };
+
+#endif
