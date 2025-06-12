@@ -1,7 +1,7 @@
 void initCivilizations(){
-	WarKingdom.changeAlignment(50);
-	WarKingdom.setType(0);
-	WarKingdom.setKing(0);
+	Kingdom1.changeAlignment(50);
+	Kingdom1.setKind(0);
+	Kingdom1.setKing(0);
 }
 
 int beginGame(){
