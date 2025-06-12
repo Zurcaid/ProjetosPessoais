@@ -1,14 +1,14 @@
-#ifndef constants
-#define constants
+#ifndef RTS_CONSTANTS_H
+#define RTS_CONSTANTS_H
 
 #include <iostream>
 #include <vector>
 using namespace std;
 
-int init_game;
-int month;
-int year;
-string input;
+extern int init_game;
+extern int month;
+extern int year;
+extern string input;
 
 class Civilization{
 	public:
@@ -50,7 +50,6 @@ class Civilization{
 		
 		void changeAlignment(int x);
 		void changeXp(int x);
-		
 		void setTroops(string x, int n);
 		void setKind(int x);
 		void setKing(int x);
@@ -82,6 +81,7 @@ class Troops{
 class Buildings{
     public:
         int income;
+        
 };
 
 #endif
