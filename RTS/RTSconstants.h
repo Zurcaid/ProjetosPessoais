@@ -28,7 +28,7 @@ class Civilization{
 		// Populacao
 		int population = 10;
 		int doctor,teacher,farmworker,shopkeeper,worker,extractivist,guard,criminal; // Empregos
-		int aprovation = 50; // Varia de 0 a 100
+		int aproval = 50; // Varia de 0 a 100
 		float growing_rate = 0.0;
 		
 		// Relacoes diplomaticas
