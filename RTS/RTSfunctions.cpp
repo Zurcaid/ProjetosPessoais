@@ -1,17 +1,27 @@
 #include "RTSconstants.h"
 #include "RTSfunctions.h"
 
+using namespace std;
+
 int init_game;
 int month;
 int year;
 string input;
+// Funcoes relativas ao gerenciamento da cidade
+Civilization::Civilization(int a, int b, int c){
+    Civilization::alignment = a;
+    Civilization::kind = b;
+    Civilization::king = c;
+}
 void Civilization::changeAlignment(int x){
 	alignment += x;
 }
 void Civilization::changeXp(int x){
 	xp += x;
 }
-		
+void Civilization::changeMoral(int x){
+    xp += x;
+}
 void Civilization::setTroops(string x, int n){
 	int size = troops.size();
 	int pos = size+1;
@@ -35,11 +45,10 @@ void Civilization::setKing(int x){
 	king = x;
 }
 
+// Funcoes relativas ao andamento do jogo
+
 void initCivilizations(){
-    Civilization Kingdom1;
-	Kingdom1.changeAlignment(50);
-	Kingdom1.setKind(0);
-	Kingdom1.setKing(0);
+    Civilization Kingdom1(50, 0, 0);
 }
 
 int beginGame(){
@@ -55,5 +64,5 @@ void loadGame(){
 }
 
 void playerTurn(){
-	
+	cout << Kingdom1.alignment;
 }
