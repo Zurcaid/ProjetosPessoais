@@ -40,6 +40,8 @@ class Civilization{
 		vector<int> pacts;
 		int trade_balance;
 		
+		int moral = 80;
+		
 		vector<vector<int>> armys;      // Exercitos
 		vector<vector<int>> army_qnt;   // Quantidade de tropas em cada exercito
 		
@@ -48,8 +50,11 @@ class Civilization{
 		
 		vector<string> champions;
 		
+		Civilization(int a, int b, int c);
+		
 		void changeAlignment(int x);
 		void changeXp(int x);
+		void changeMoral(int x);
 		void setTroops(string x, int n);
 		void setKind(int x);
 		void setKing(int x);
