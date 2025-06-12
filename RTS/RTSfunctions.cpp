@@ -1,6 +1,10 @@
-#ifndef funcoes
-#define funcoes
+#include "RTSconstants.h"
+#include "RTSfunctions.h"
 
+int init_game;
+int month;
+int year;
+string input;
 void Civilization::changeAlignment(int x){
 	alignment += x;
 }
@@ -53,5 +57,3 @@ void loadGame(){
 void playerTurn(){
 	
 }
-
-#endif
