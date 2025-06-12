@@ -1,5 +1,6 @@
+#include "RTSfunctions.h"
 #include "RTSconstants.h"
-#include "RTSfunctions.cpp"
+#include <iostream>
 using namespace std;
 
 int main()
@@ -14,8 +15,12 @@ int main()
 	
 	while(1){
 		playerTurn();
-		age += 1;
-		cout << "Date: " << age;
+		month += 1;
+		if(month >= 12){
+		    month = month - 12;
+		    year += 1;
+		}
+		cout << "Actual date: " << month << "/" << year;
 		cin >> input;
 	}
 	return 0;
