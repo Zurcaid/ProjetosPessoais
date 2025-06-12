@@ -3,8 +3,9 @@
 using namespace std;
 
 int init_game;
-int age;
-int input;
+int month;
+int year;
+string input;
 
 class Civilization{
 	public:
@@ -13,6 +14,7 @@ class Civilization{
 		int xp = 0; // 1 lvl = 100 xp
 	    int tech_lvl = 0;
 		int kind, king;
+		string name;
 		
 		// Recursos
 		int money = 0;
@@ -20,18 +22,19 @@ class Civilization{
 		int gear,steel,paper,chemicals; // Secundarios
 		
 		// Construcoes
-		vector<int> construcoes;
+		vector<int> buildings;
+		int city_dur = 100;
 		
 		// Populacao
 		int population = 10;
 		int doctor,teacher,farmworker,shopkeeper,worker,extractivist,guard,criminal; // Empregos
-		int happyness = 50; // Varia de 0 a 100
+		int aprovation = 50; // Varia de 0 a 100
 		float growing_rate = 0.0;
 		
 		// Relacoes diplomaticas
-		string nations_known[];
-		string nk_relationship[];
-		int pacts[];
+		vector<string> nations_known;
+		vector<int> nk_relationship;
+		vector<int> pacts;
 		int trade_balance;
 		
 		vector<vector<int>> armys;      // Exercitos
@@ -39,6 +42,8 @@ class Civilization{
 		
 		vector<string> troops;  // Tropas no pais
 		vector<int> troopsNum;  // Quantidade de cada tropa
+		
+		vector<string> champions;
 		
 		void changeAlignment(int x){
 			alignment += x;
@@ -69,6 +74,7 @@ class Civilization{
 		void setKing(int x){
 			king = x;
 		}
+		
 };
 
 Civilization Kingdom1;
@@ -78,10 +84,8 @@ class King{
 		int lvl;
 		int hp = 10;
 		
-		void passive1(int a, int b, int c, int d, int e, int f){
-			int armyDmg_boost = a;
-			int armyHp_boost = b;
-			int moneyGen_boost = c;
+		void passive1(){
+		
 		}
 		void skill1(){
 			
@@ -97,8 +101,21 @@ class Champions{
 
 class Troops{
 	public:
-		int name;
-		int kingdom;
-		int dmg,hp;
+		string kingdom;
+		int dmg, hp;
 		
+		void setKingdom(string x){
+		    kingdom = x;
+		}
+		void setDmg(int x){
+		    dmg = x;
+		}
+		void setHp(int x){
+		    hp = x;
+		}
+};
+
+class Buildings{
+    public:
+        int income;
 };
