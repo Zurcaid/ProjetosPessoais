@@ -82,9 +82,20 @@ Buildings::Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int 
 }
 
 
-// void Buildings::buildConstruction(Civilization &obj){
-// 	Civilization.money -= Buildings.cost;
-// }
+void Buildings::buildConstruction(Civilization Obj){
+	Obj.money -= cost;
+	Obj.aproval += aproval;
+	Obj.worker = worker;
+	Obj.farmworker = farmworker;
+	Obj.extractivist = extractivist;
+	Obj.shopkeeper = shopkeeper;
+	Obj.worker = worker;
+	Obj.farmworker = farmworker;
+	Obj.extractivist = extractivist;
+	Obj.shopkeeper = shopkeeper;
+	Obj.guard = guard;
+	
+}
 
 string troops[2][1] = {{"Swordsman"},{"Archer"}};
 string constructions[2][1] = {{"corn farm"},{"soil farm"}};
