@@ -1,4 +1,5 @@
 #include "RTSconstants.h"
+#include "RTSfunctions.h"
 
 using namespace std;
 
@@ -44,45 +45,48 @@ void Civilization::setKing(int x){
 // t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen;
 // Setor 1: Estruturas relacionadas ao consumo ou producao de material.
 // Setor 2: Outras estruturas (hospitais, escolas, etc).
-Buildings::Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int g,int h,int i,int j,int k,int l,int m,int n,int o,int p,int q,int r,int s,int t,int u,int t2){
-	Buildings.tech_req = t1;
-	Buildings.aproval = ap;
-	Buildings.population = pop;
-	Buildings.kind = a;
-	Buildings.sector = b;
-	Buildings.kingdom = c;
-	Buildings.cost = d;
-	Buildings.money = e;
-	Buildings.products = j;
-	Buildings.gear = k;
-	Buildings.steel = l;
-	Buildings.paper = m;
-	Buildings.chemicals = n;
-	Buildings.food = o;
-	Buildings.worker = p;
-	Buildings.farmworker = q;
-	Buildings.extractivist = r;
-	Buildings.shopkeeper = s;
-	Buildings.troops = t;
-	Buildings.troopsnum = u;
-	Buildings.tech_gen = t2;
+Buildings::Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int f,int g,int h,int i,int j,int k,int l,int m,int n,int o,int p,int q,int r,int s,int t,int u,int t2){
+	tech_req = t1;
+	aproval = ap;
+	population = pop;
+	kind = a;
+	sector = b;
+	kingdom = c;
+	cost = d;
+	money = e;
+	products = j;
+	gear = k;
+	steel = l;
+	paper = m;
+	chemicals = n;
+	food = o;
+	worker = p;
+	farmworker = q;
+	extractivist = r;
+	shopkeeper = s;
+	troops = t;
+	troops_num = u;
+	tech_gen = t2;
 	if(b==1){
-		Buildings.ores = f;
-		Buildings.wood = g;
-		Buildings.stone = h;
-		Buildings.raw_food = i;
+		ores = f;
+		wood = g;
+		stone = h;
+		raw_food = i;
 	}else{
-		Buildings.teacher = f;
-		Buildings.doctor = g;
-		Buildings.guard = h;
-		Buildings.criminal = i;
+		teacher = f;
+		doctor = g;
+		guard = h;
+	    criminal = i;
 	}
 }
 
 
-void Buildings::buildConstruction(Civilization &obj){
-	Civilization.money -= Buildings.cost;
-}
+// void Buildings::buildConstruction(Civilization &obj){
+// 	Civilization.money -= Buildings.cost;
+// }
+
+string troops[2][1] = {{"Swordsman"},{"Archer"}};
+string constructions[2][1] = {{"corn farm"},{"soil farm"}};
 
 Civilization PlayerKingdom(50,0,0);
 
@@ -104,5 +108,5 @@ void loadGame(){
 }
 
 void playerTurn(){
-	cout << PlayerKingdom.alignment;
+    
 }
