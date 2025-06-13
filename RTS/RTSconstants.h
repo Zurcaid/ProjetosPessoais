@@ -29,6 +29,7 @@ class Civilization{
 		int doctor,teacher,farmworker,shopkeeper,worker,extractivist,guard,criminal; // Empregos
 		int aproval = 50; // Varia de 0 a 100
 		float growing_rate = 0.0;
+		float education = 1.0;
 
 		// Relacoes diplomaticas
 		vector<string> nations_known;
@@ -105,12 +106,12 @@ class Buildings{
 		int growing_rate;
 		
 		int troops, troops_num;
-		// t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen;
+		// t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products/education,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen;
 		// Setor 1: Estruturas relacionadas ao consumo ou producao de material.
 		// Setor 2: Outras estruturas (hospitais, escolas, etc).
 		Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int f,int g,int h,int i,int j,int k,int l,int m,int n,int o,int p,int q,int r,int s,int t,int u,int t2);
 
-		void buildConstruction();
+		void buildConstruction(Civilization Obj);
 		void monthlyUpdate();
 };	
 
