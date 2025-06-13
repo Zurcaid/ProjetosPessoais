@@ -54,7 +54,6 @@ Buildings::Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int 
 	kingdom = c;
 	cost = d;
 	money = e;
-	products = j;
 	gear = k;
 	steel = l;
 	paper = m;
@@ -72,11 +71,13 @@ Buildings::Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int 
 		wood = g;
 		stone = h;
 		raw_food = i;
+    	products = j;
 	}else{
 		teacher = f;
 		doctor = g;
 		guard = h;
 	    criminal = i;
+    	education = j;
 	}
 }
 
