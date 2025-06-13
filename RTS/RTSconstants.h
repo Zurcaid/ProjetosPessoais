@@ -5,10 +5,6 @@
 #include <vector>
 using namespace std;
 
-int init_game;
-int month;
-int year = 1;
-string input;
 
 class Civilization{
 	public:
@@ -80,7 +76,6 @@ class Champions{
 
 };
 
-string troops[2][1] = {{"Swordsman"},{"Archer"}};
 
 class Troops{
 	public:
@@ -90,7 +85,6 @@ class Troops{
 
 };
 
-string constructions[2][1] = {{"corn farm"},{"soil farm"}};
 
 class Buildings{
     public:
@@ -114,7 +108,7 @@ class Buildings{
 		// t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen;
 		// Setor 1: Estruturas relacionadas ao consumo ou producao de material.
 		// Setor 2: Outras estruturas (hospitais, escolas, etc).
-		Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int g,int h,int i,int j,int k,int l,int m,int n,int o,int p,int q,int r,int s,int t,int u,int t2);
+		Buildings(int t1,int ap,int pop,int a,int b,string c,int d,int e,int f,int g,int h,int i,int j,int k,int l,int m,int n,int o,int p,int q,int r,int s,int t,int u,int t2);
 
 		void buildConstruction();
 		void monthlyUpdate();
