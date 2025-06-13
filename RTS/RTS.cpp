@@ -1,7 +1,11 @@
 #include "RTSconstants.h"
-#include "RTSfunctions.cpp"
+#include "RTSfunctions.h"
 #include <iostream>
 using namespace std;
+
+int month,init_game;
+int year = 1;
+string input;
 
 int main()
 {
