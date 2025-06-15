@@ -22,14 +22,14 @@ int main()
 
 	while (1)
 	{
-		playerTurn();
 		month += 1;
+		cout << "Date: Month " << month << " | Year " << year << " ... ";
 		if (month >= 13)
 		{
 			month = month - 12;
 			year += 1;
 		}
-		cout << "Date: Month " << month << " | Year " << year << " ... ";
+		playerTurn();
 		cin >> input;
 	}
 	return 0;
