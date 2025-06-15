@@ -18,6 +18,7 @@ class Civilization
 	int lvl;
 	int tech_lvl = 0;
 	int kind, king;
+	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
 	string name;
 	int location;
 
@@ -33,9 +34,11 @@ class Civilization
 	// Populacao
 	int population = 10;
 	int doctor, teacher, farmworker, shopkeeper, worker, extractivist, guard, criminal; // Empregos
-	int aproval = 50;																	// Varia de 0 a 100
+	int aproval = 50; // Varia de 0 a 100
 	float growing_rate = 0.0;
 	float education = 1.0;
+	int war_prisoners;
+	vector<Champions> important_prisoners;
 
 	// Relacoes diplomaticas
 	vector<string> nations_known;
@@ -45,10 +48,10 @@ class Civilization
 
 	int moral = 80;
 
-	vector<vector<int>> armys;	  // Exercitos
+	vector<vector<int>> armys; // Exercitos
 	vector<vector<int>> army_qnt; // Quantidade de tropas em cada exercito
 
-	vector<int> troops;		// Tropas no pais
+	vector<int> troops; // Tropas no pais
 	vector<int> troops_num; // Quantidade de cada tropa
 
 	vector<string> champions;
@@ -70,8 +73,13 @@ class King
 	string name;
 	int xp;
 	int lvl;
+	int kingdom;
+	int age, max_age;
+	int alignment, troop_capacity;
 	int hp = 10;
 	int dmg = 10;
+	//a=kingdom,b=age,c=max_age,d=hp,e=dmg, f=alignment,g=troop_capacity,h=name;
+	King(int a, int b, int c, int d, int e,int f, int g, string h);
 };
 
 class Champions
@@ -80,15 +88,15 @@ class Champions
 	string name;
 	int kingdom;
 	int capacity;
-	int loyalty;
+	int loyalty, alignment;
 	int xp;
 	int lvl;
 	int dmg, hp;
 
 	int archery_boost, melee_boost, defender_boost, beast_boost;
 	int dmg_boost, hp_boost, foodcost_boost, moral_boost;
-	// a=kingdom,b=capacity,c=loyalty,d=xp,e=dmg,f=hp,g=archery_boost,h=melee_boost,i=defender_boost,j=beast_boost,k=dmg_boost,l=hp_boost,m=foodcost_boost,n=moral_boost, o=name;
-	Champions(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int m, int n, string o);
+	// a=kingdom,b=capacity,c=loyalty,d=xp,e=dmg,f=hp,g=archery_boost,h=melee_boost,i=defender_boost,j=beast_boost,k=dmg_boost,l=hp_boost,m=foodcost_boost,n=moral_boost, o=alignment,p=name;
+	Champions(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int m, int n, int o, string p);
 	void changeXp(int x);
 	void monthlyUpdate();
 };
@@ -99,11 +107,11 @@ class Troops
 	string name;
 	int kingdom;
 	int dmg, hp;
-	int kind;
-	int food_cost_per_month;
+	int kind; // 1=melee, 2=archer, 3=defender, 4=beast
+	int food_cost_per_month, size;
 	int ranged;
-	// a=kingdom,b=kind,c=ranged,d=food_cost_per_month,e=dmg,f=hp,g=name
-	Troops(int a, int b, int c, int d, int e, int f, string g);
+	// a=kingdom,b=kind,c=ranged,d=food_cost_per_month,e=dmg,f=hp,g=size,h=name
+	Troops(int a, int b, int c, int d, int e, int f, int g, string h);
 };
 
 class Army
@@ -114,6 +122,8 @@ class Army
 	int row2_hp, row2_dmg, row2_ranged;
 	int row3_hp, row3_dmg, row3_ranged;
 	int front_row = 1;
+	
+	Army(Champions& leader,Troops& row1, int row1_qnt, Troops& row2, int row2_qnt, Troops& row3, int row3_qnt);
 };
 
 class Buildings
@@ -150,13 +160,5 @@ class Buildings
 	void monthlyUpdate(Civilization &Obj);
 };
 
-
-
-
-
-
-
-// t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen,wc=wood_cost,stone_c=stone_cost,steel_c=steel_cost;
-Buildings FruitFarm1(0, 1.0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 2, 0, "Small fruit farm"), AnimalFarm1(0, 1.0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 2, 0, "Small animal farm");
 
 #endif
