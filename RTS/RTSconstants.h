@@ -8,6 +8,8 @@ using namespace std;
 class Buildings;
 class Troops;
 class Champions;
+class King;
+class Army;
 
 class Civilization
 {
@@ -18,6 +20,7 @@ class Civilization
 	int lvl;
 	int tech_lvl = 0;
 	int kind, king;
+	string emperor_name, civilization_name;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
 	string name;
 	int location;
@@ -34,9 +37,10 @@ class Civilization
 	// Populacao
 	int population = 10;
 	int doctor, teacher, farmworker, shopkeeper, worker, extractivist, guard, criminal; // Empregos
-	int aproval = 50; // Varia de 0 a 100
+	int aproval = 50;
+	int civil_war_chance = 0;
 	float growing_rate = 0.0;
-	float education = 1.0;
+	float education = 0.1;
 	int war_prisoners;
 	vector<Champions> important_prisoners;
 
@@ -48,13 +52,11 @@ class Civilization
 
 	int moral = 80;
 
-	vector<vector<int>> armys; // Exercitos
-	vector<vector<int>> army_qnt; // Quantidade de tropas em cada exercito
-
+	vector<Champions> champions;
+	vector<vector<Army>> armys; // Exercitos
+	
 	vector<int> troops; // Tropas no pais
 	vector<int> troops_num; // Quantidade de cada tropa
-
-	vector<string> champions;
 
 	Civilization(int a, int b, int c, int d);
 
@@ -65,6 +67,9 @@ class Civilization
 	void setKind(int x);
 	void setKing(int x);
 	void buildingsMonthlyUpdates();
+	void championsMonthlyUpdates();
+	void monthlyUpdates();
+	void civilWar();
 };
 
 class King
@@ -92,13 +97,15 @@ class Champions
 	int xp;
 	int lvl;
 	int dmg, hp;
+	int raid_chance;
 
 	int archery_boost, melee_boost, defender_boost, beast_boost;
 	int dmg_boost, hp_boost, foodcost_boost, moral_boost;
 	// a=kingdom,b=capacity,c=loyalty,d=xp,e=dmg,f=hp,g=archery_boost,h=melee_boost,i=defender_boost,j=beast_boost,k=dmg_boost,l=hp_boost,m=foodcost_boost,n=moral_boost, o=alignment,p=name;
 	Champions(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int m, int n, int o, string p);
 	void changeXp(int x);
-	void monthlyUpdate();
+	void monthlyUpdate(Civilization Obj1);
+	void raid(Civilization Obj1);
 };
 
 class Troops
@@ -122,8 +129,10 @@ class Army
 	int row2_hp, row2_dmg, row2_ranged;
 	int row3_hp, row3_dmg, row3_ranged;
 	int front_row = 1;
+	int food_cost;
+	int kingdom;
 	
-	Army(Champions& leader,Troops& row1, int row1_qnt, Troops& row2, int row2_qnt, Troops& row3, int row3_qnt);
+	Army(Champions leader, int leader_row, int moral, Troops row1, int row1_qnt, Troops row2, int row2_qnt, Troops row3, int row3_qnt);
 };
 
 class Buildings
