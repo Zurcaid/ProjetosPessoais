@@ -23,6 +23,7 @@ class Civilization
 	int dist_x, dist_y;
 	King* Emperor;
 	string emperor_name, civilization_name;
+	int identifier;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
 	string name;
 
@@ -46,7 +47,8 @@ class Civilization
 	vector<Champions> important_prisoners;
 
 	// Relacoes diplomaticas
-	vector<string> nations_known;
+	vector<int> nations_known;
+	vector<Civilization> nations_unknown;
 	vector<int> nk_relationship;
 	vector<int> pacts;
 	int trade_balance;
@@ -61,7 +63,7 @@ class Civilization
 	vector<int> troops_num; // Quantidade de cada tropa
 
     //a=kind,b=king;c=dist_x;d=dist_y
-	Civilization(int a, int b, int c, int d);
+	Civilization(int a, int b, int c, int d, int e);
 
 	void changeAlignment(int x);
 	void defineEmperor();
@@ -75,6 +77,7 @@ class Civilization
 	void monthlyUpdates();
 	void civilWar();
 	void exploreDirection(int a);
+	void setNationsUnknown();
 	void addNationKnown();
 };
 
