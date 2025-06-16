@@ -378,6 +378,26 @@ void newGame()
 			PlayerKingdom.civilization_name = input1;
 		}
 	}
+	int king_selected = 0;
+	int kind_selected;
+	if (style == 2){
+		while(!king_selected){
+			cout << end_of_page;
+			cout << "Choose a civilization kind:\n0 - Human: An empire based on humanity's history, historical warriors, legends.\n1 - Holy: A holy empire whose objective is to spread the teachings of God to the world.\n2 - Evil: An empire of darkness whose objective is to control the world, destroying those who oppose it.\n3 - Deity: An empire controled by godlike beings.\n4 - Witchcraft: An empire of sorcerers who use techniques to surpass their limits as mortal beings.\n5 - Technology: The remains of an advanced empire, now with the task of advance even more the technology to control the world.\n6 - Biotechnology: Founded by unethical experiments on living beings, this is an empire that will create monsters to control the world.\nChoose one to see the types of king you can select: ";
+			while(!(cin >> kind_selected)){
+				cout << "No option selected, choose again.\n";
+				cout << end_of_page;
+				cout << "Choose a civilization kind:\n0 - Human: An empire based on humanity's history, historical warriors, legends.\n1 - Holy: A holy empire whose objective is to spread the teachings of God to the world.\n2 - Evil: An empire of darkness whose objective is to control the world, destroying those who oppose it.\n3 - Deity: An empire controled by godlike beings.\n4 - Witchcraft: An empire of sorcerers who use techniques to surpass their limits as mortal beings.\n5 - Technology: The remains of an advanced empire, now with the task of advance even more the technology to control the world.\n6 - Biotechnology: Founded by unethical experiments on living beings, this is an empire that will create monsters to control the world.\nChoose one to see the types of king you can select: ";
+				cin.clear();
+				cin.ignore(10000, '\n');
+			}
+			if((kind_selected>=0) and (kind_selected<=6)){
+				cout << "Good";
+			}else{
+				cout << "No option selected, choose again.\n";
+			}
+		}
+	}
 }
 
 void loadGame()
