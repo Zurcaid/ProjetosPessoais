@@ -1,6 +1,6 @@
 #include "RTSconstants.h"
 #include "RTSfunctions.h"
-#include "RTSfunctions.cpp"
+// #include "RTSfunctions.cpp"
 #include <iostream>
 using namespace std;
 
