@@ -48,13 +48,19 @@ vector<vector<Troops>> soldier= {{Knight_1,Archer_1,Shielder_1,Horse_1}, {Cleric
 
 vector<vector<Buildings>> constructions = {{FruitFarm1, AnimalFarm1}, {FruitFarm1, AnimalFarm1}};
 
+vector<Civilization> BotCivilization;
+vector<BotIA> NPCs;
+
 // Funcoes relativas ao gerenciamento da cidade
-Civilization::Civilization(int a, int b, int c, int d)
+//a=alignment,b=kind;c=king;d=location
+Civilization::Civilization(int a, int b, int c)
 {
-	alignment = a;
-	kind = b;
-	king = c;
-	location = d;
+	kind = a;
+	king = b;
+	King Emperor(0,0,0,0,0,0,0,"0");
+	Emperor = kings.at(kind).at(king);
+	location = c;
+	alignment = kings.at(a).at(b).alignment;
 }
 void Civilization::changeAlignment(int x)
 {
@@ -349,9 +355,16 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 }
 
 
+
+// Funcoes relativas ao gerenciamento de NPCs
+BotIA::BotIA(){
+    // BotCivilization = Obj1;
+    // BotKing = Obj2;
+}
+
 // Funcoes relativas ao andamento do jogo
 
-Civilization PlayerKingdom(50, 0, 0, 0);
+Civilization PlayerKingdom(0, 0, 0);
 
 int beginGame()
 {
@@ -368,9 +381,8 @@ int beginGame()
 	}
 }
 
-void newGame()
-{
-	while(!difficulty){
+void startNewPlayer(){
+    while(!difficulty){
 		cout << end_of_page;
 		cout << "Select a difficulty:\n1 - Easy: All kingdoms start at lvl 1.\n2 - Normal: Some kingdoms are already developed.\n3 - Hard: All kingdoms are already stablished.\nYour choice: ";
 		cin >> input1;
@@ -439,6 +451,7 @@ void newGame()
 			        if((inputnumber >= 0) and (inputnumber < size)){
 			            king_selected = inputnumber;
 			            PlayerKingdom.king = king_selected;
+			            PlayerKingdom.kind = kind_selected;
 			        }
 			    }else{
 			        cin.clear();
@@ -451,8 +464,41 @@ void newGame()
 	}
 }
 
+void generateOtherCivilizations(){
+    int count = 0;
+    int size1 = kings.size(); // Quantidade de estilos de civilizacao
+    int possible_kinds[7][4];
+    for(int i1 = 0; i1 < size1; i1++){
+        int size2 = kings.at(i1).size();
+        for(int i2 = 0; i2 < size2; i2++){
+            possible_kinds[i1][i2] = 1;
+        }
+    }
+    possible_kinds[PlayerKingdom.kind][PlayerKingdom.king] = 0;
+    for(int i1 = 0; i1 < size1; i1++){
+        int size2 = kings.at(i1).size();
+        for(int i2 = 0; i2 < size2; i2++){
+            count++;
+            if(possible_kinds[i1][i2] != 1){
+                continue;
+            }
+            Civilization KingdomNPC(i1,i2,count);
+        }
+    }
+}
+
+void startNPCS(){
+    
+}
+
+void newGame()
+{
+	startNewPlayer();
+}
+
 void loadGame()
 {
+    
 }
 
 void playerTurn()
