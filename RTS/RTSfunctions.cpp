@@ -163,7 +163,20 @@ void Civilization::defineEmperor(){
 	Emperor = new King(0,0,0,0,0,0,0,"0");
 	*Emperor = kings.at(kind).at(king);
 }
-
+void Civilization::exploreDirection(int a){
+    if(a == 1){
+        explored_n += 250;
+    }else if(a == 2){
+        explored_s += 250;
+    }else if(a == 3){
+        explored_e += 250;
+    }else if(a == 4){
+        explored_w += 250;
+    }
+}
+void Civilization::addNationKnown(){
+    
+}
 
 
 // Funcoes relativas ao gerenciamento de reis
@@ -488,13 +501,15 @@ void generateOtherCivilizations(){
                 continue;
             }
             if(difficulty == 1){
-                int x = (rand() % 10001)-5000;
-                int y = (rand() % 10001)-5000;
+                int x = (rand() % 10000)-5000;
+                while(x == 0){
+                    int x = (rand() % 10000)-5000;
+                }
+                int y = (rand() % 3000)-1500;
                 Civilization KingdomNPC(i1,i2,x, y);
                 KingdomNPC.defineEmperor();
                 botCivilizations.push_back(KingdomNPC);
-                cout << KingdomNPC.Emperor->name;
-                cout << PlayerKingdom.Emperor->name;
+                cout << x << " | " << y << "\n";
             }
         }
     }
