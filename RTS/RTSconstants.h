@@ -20,7 +20,7 @@ class Civilization
 	int lvl;
 	int tech_lvl = 0;
 	int kind, king;
-	int location;
+	int dist_x, dist_y;
 	King* Emperor;
 	string emperor_name, civilization_name;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
@@ -50,6 +50,7 @@ class Civilization
 	vector<int> nk_relationship;
 	vector<int> pacts;
 	int trade_balance;
+	int explored_n, explored_s, explored_e, explored_w;
 
 	int moral = 80;
 
@@ -59,8 +60,8 @@ class Civilization
 	vector<int> troops; // Tropas no pais
 	vector<int> troops_num; // Quantidade de cada tropa
 
-    //a=kind;b=king;c=location
-	Civilization(int a, int b, int c);
+    //a=kind,b=king;c=dist_x;d=dist_y
+	Civilization(int a, int b, int c, int d);
 
 	void changeAlignment(int x);
 	void defineEmperor();
@@ -73,6 +74,8 @@ class Civilization
 	void championsMonthlyUpdates();
 	void monthlyUpdates();
 	void civilWar();
+	void exploreDirection(int a);
+	void addNationKnown();
 };
 
 class King
