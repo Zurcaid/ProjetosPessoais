@@ -185,7 +185,7 @@ class BotIA
     Civilization* BotCivilization;
     King* BotKing;
     BotIA(Civilization& Obj1, King& Obj2);
-    void BotTurn();
+    void botTurn();
 };
 
 #endif
