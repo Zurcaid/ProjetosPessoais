@@ -48,16 +48,17 @@ vector<vector<Troops>> soldier= {{Knight_1,Archer_1,Shielder_1,Horse_1}, {Cleric
 
 vector<vector<Buildings>> constructions = {{FruitFarm1, AnimalFarm1}, {FruitFarm1, AnimalFarm1}};
 
-vector<Civilization> BotCivilization;
+vector<Civilization> botCivilizations;
 vector<BotIA> NPCs;
 
 // Funcoes relativas ao gerenciamento da cidade
-//a=alignment,b=kind;c=king;d=location
-Civilization::Civilization(int a, int b, int c)
+//a=kind,b=king;c=dist_x;d=dist_y
+Civilization::Civilization(int a, int b, int c, int d)
 {
 	kind = a;
 	king = b;
-	location = c;
+	dist_x = c;
+	dist_y = d;
 	alignment = kings.at(a).at(b).alignment;
 }
 void Civilization::changeAlignment(int x)
@@ -158,6 +159,12 @@ void Civilization::monthlyUpdates(){
 	moral += storage1/10;
 }
 
+void Civilization::defineEmperor(){
+	Emperor = new King(0,0,0,0,0,0,0,"0");
+	*Emperor = kings.at(kind).at(king);
+}
+
+
 
 // Funcoes relativas ao gerenciamento de reis
 //a=kingdom,b=age,c=max_age,d=hp,e=dmg,f=alignment,g=troop_capacity,h=name;
@@ -172,10 +179,6 @@ King::King(int a, int b, int c, int d, int e, int f, int g, string h){
 	troop_capacity = g;
 }
 
-void Civilization::defineEmperor(){
-	Emperor = new King(0,0,0,0,0,0,0,"0");
-	*Emperor = kings.at(kind).at(king);
-}
 
 
 // Funcoes relativas ao gerenciamento de comandantes
@@ -359,13 +362,13 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 
 // Funcoes relativas ao gerenciamento de NPCs
 BotIA::BotIA(){
-    // BotCivilization = Obj1;
+    // BotCivilizations = Obj1;
     // BotKing = Obj2;
 }
 
 // Funcoes relativas ao andamento do jogo
 
-Civilization PlayerKingdom(0, 0, 0);
+Civilization PlayerKingdom(0, 0, 0, 0);
 
 int beginGame()
 {
@@ -484,7 +487,15 @@ void generateOtherCivilizations(){
             if(possible_kinds[i1][i2] != 1){
                 continue;
             }
-            Civilization KingdomNPC(i1,i2,count);
+            if(difficulty == 1){
+                int x = (rand() % 10001)-5000;
+                int y = (rand() % 10001)-5000;
+                Civilization KingdomNPC(i1,i2,x, y);
+                KingdomNPC.defineEmperor();
+                botCivilizations.push_back(KingdomNPC);
+                cout << KingdomNPC.Emperor->name;
+                cout << PlayerKingdom.Emperor->name;
+            }
         }
     }
 }
@@ -496,6 +507,7 @@ void startNPCS(){
 void newGame()
 {
 	startNewPlayer();
+	generateOtherCivilizations();
 }
 
 void loadGame()
