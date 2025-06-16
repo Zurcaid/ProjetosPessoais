@@ -21,6 +21,7 @@ class Civilization
 	int tech_lvl = 0;
 	int kind, king;
 	int location;
+	King* Emperor;
 	string emperor_name, civilization_name;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
 	string name;
@@ -62,6 +63,7 @@ class Civilization
 	Civilization(int a, int b, int c);
 
 	void changeAlignment(int x);
+	void defineEmperor();
 	void changeXp(int x);
 	void changeMoral(int x);
 	void setTroops(int x, int n);
