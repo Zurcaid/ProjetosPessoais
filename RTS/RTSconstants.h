@@ -20,10 +20,10 @@ class Civilization
 	int lvl;
 	int tech_lvl = 0;
 	int kind, king;
+	int location;
 	string emperor_name, civilization_name;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
 	string name;
-	int location;
 
 	// Recursos
 	int money = 0;
@@ -58,7 +58,8 @@ class Civilization
 	vector<int> troops; // Tropas no pais
 	vector<int> troops_num; // Quantidade de cada tropa
 
-	Civilization(int a, int b, int c, int d);
+    //a=kind;b=king;c=location
+	Civilization(int a, int b, int c);
 
 	void changeAlignment(int x);
 	void changeXp(int x);
@@ -169,5 +170,14 @@ class Buildings
 	void monthlyUpdate(Civilization &Obj);
 };
 
+class BotIA
+{
+    int npc_type;
+    
+    // Civilization BotCivilization;
+    // King BotKing;
+    BotIA();
+    void BotTurn();
+};
 
 #endif
