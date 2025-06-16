@@ -13,7 +13,7 @@ string end_of_page = "--------------------\n";
 //a=kingdom,b=age,c=max_age,d=hp,e=dmg,f=alignment,g=troop_cacapity,h=name;
 King KingArthur(0,20,90,300,300,75,10000,"The Prophesied King"), Gilgamesh(0,20,130,500,500,50,0,"The King of All that Exists"), MilitaryGenius(0,30,90,100,100,50,200000,"The Military Genius");
 King GodEmperor(1,30,500,300,300,50,10000,"The God Emperor of Humanity"), ChosenOne(1,16,70,500,500,100,1000,"The Chosen One"), FalseFalconOfLight(1,20,80,100,100,0,100,"The False Falcon of Light");
-King NamelessGodOfEvil(2,7000,50000,100,100,0,0,"The Nameless God Of Evil"), VampireLord(2,120,10000,500,500,0,10000,"The Vampire Lord"), ReincarnatedDemonKing(2,10,1200,500,500,50,10000,"The Reincarnated Demon King");
+King NamelessGodOfEvil(2,7000,50000,100,100,0,0,"The Nameless God Of Evil"), VampireLord(2,120,10000,500,500,0,10000,"The Vampire Lord"), ReincarnatedDemonKing(2,10,1200,500,500,50,10000,"The Demon King");
 King WorldEater(3,7000,50000,1000,1000,0,0,"The World Eater"), PerfectBeing(3,7000,50000,1000,1000,50,0,"The Perfect Being"), KingOverHeaven(3,110,50000,750,750,50,10000,"The Ascended King Over Heaven");
 King MonarchOfIllusions(4,3000,10000,1000,100,0,10,"The Monarch of Illusions"), KingOfShadows(4,20,600,500,500,50,1000,"The King of Shadows"), StrongestSorcerer(4,30,90,750,750,50,0,"The Strongest Sorcerer");
 King SithLord(5,80,1000,200,200,0,0,"The Senate Lord"), Android(5,1,100,200,200,50,10000,"The Android");
@@ -53,12 +53,13 @@ vector<BotIA> NPCs;
 
 // Funcoes relativas ao gerenciamento da cidade
 //a=kind,b=king;c=dist_x;d=dist_y
-Civilization::Civilization(int a, int b, int c, int d)
+Civilization::Civilization(int a, int b, int c, int d, int e = 1000)
 {
 	kind = a;
 	king = b;
 	dist_x = c;
 	dist_y = d;
+	identifier = e;
 	alignment = kings.at(a).at(b).alignment;
 }
 void Civilization::changeAlignment(int x)
@@ -163,6 +164,7 @@ void Civilization::defineEmperor(){
 	Emperor = new King(0,0,0,0,0,0,0,"0");
 	*Emperor = kings.at(kind).at(king);
 }
+
 void Civilization::exploreDirection(int a){
     if(a == 1){
         explored_n += 250;
@@ -174,8 +176,29 @@ void Civilization::exploreDirection(int a){
         explored_w += 250;
     }
 }
+
 void Civilization::addNationKnown(){
-    
+    int size = nations_unknown.size();
+    int found_x, found_y;
+    for(int i = 0; i < size; i++){
+        Civilization act_civil = botCivilizations.at(i);
+        if((dist_x == act_civil.dist_x) and (dist_y == act_civil.dist_y)){
+            continue;
+        }
+        if(dist_x>=act_civil.dist_x){
+            if((dist_x-explored_w)<act_civil.dist_x) found_x = 1;
+        }else{
+            if((dist_x+explored_e)>act_civil.dist_x) found_x = 1;
+        }
+        if(dist_y>=act_civil.dist_y){
+            if((dist_y-explored_s)<act_civil.dist_y) found_y = 1;
+        }else{
+            if((dist_y+explored_n)>act_civil.dist_y) found_y = 1;
+        }
+    }
+}
+void Civilization::setNationsUnknown(){
+    nations_unknown = botCivilizations;
 }
 
 
@@ -375,8 +398,6 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 
 // Funcoes relativas ao gerenciamento de NPCs
 BotIA::BotIA(){
-    // BotCivilizations = Obj1;
-    // BotKing = Obj2;
 }
 
 // Funcoes relativas ao andamento do jogo
@@ -493,10 +514,10 @@ void generateOtherCivilizations(){
         }
     }
     possible_kinds[PlayerKingdom.kind][PlayerKingdom.king] = 0;
+    if(style == 1) size1 = 1;
     for(int i1 = 0; i1 < size1; i1++){
         int size2 = kings.at(i1).size();
         for(int i2 = 0; i2 < size2; i2++){
-            count++;
             if(possible_kinds[i1][i2] != 1){
                 continue;
             }
@@ -506,10 +527,10 @@ void generateOtherCivilizations(){
                     int x = (rand() % 10000)-5000;
                 }
                 int y = (rand() % 3000)-1500;
-                Civilization KingdomNPC(i1,i2,x, y);
+                Civilization KingdomNPC(i1,i2,x,y,count);
                 KingdomNPC.defineEmperor();
                 botCivilizations.push_back(KingdomNPC);
-                cout << x << " | " << y << "\n";
+                count++;
             }
         }
     }
