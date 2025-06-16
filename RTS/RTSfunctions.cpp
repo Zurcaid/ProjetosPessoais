@@ -162,19 +162,18 @@ void Civilization::monthlyUpdates(){
 }
 
 void Civilization::defineEmperor(){
-	Emperor = new King(0,0,0,0,0,0,0,"0");
 	*Emperor = kings.at(kind).at(king);
 }
 
 void Civilization::exploreDirection(int a){
     if(a == 1){
-        explored_n += 250;
+        explored_n += 200;
     }else if(a == 2){
-        explored_s += 250;
+        explored_s += 200;
     }else if(a == 3){
-        explored_e += 250;
+        explored_e += 200;
     }else if(a == 4){
-        explored_w += 250;
+        explored_w += 200;
     }
 }
 
@@ -405,6 +404,11 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 BotIA::BotIA(Civilization& Obj1, King& Obj2){
     BotCivilization = &Obj1;
     BotKing = &Obj2;
+}
+void BotIA::botTurn(){
+    // Fase de exploracao
+    int random1 = rand() % 4 + 1;
+    BotCivilization->exploreDirection(random1);
 }
 
 // Funcoes relativas ao andamento do jogo
