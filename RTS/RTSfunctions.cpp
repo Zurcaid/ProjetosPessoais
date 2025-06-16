@@ -158,6 +158,7 @@ void Civilization::monthlyUpdates(){
 	}
 	storage1 = kings.at(kind).at(king).lvl;
 	moral += storage1/10;
+	addNationKnown();
 }
 
 void Civilization::defineEmperor(){
@@ -181,7 +182,7 @@ void Civilization::addNationKnown(){
     int size = nations_unknown.size();
     int found_x, found_y;
     for(int i = 0; i < size; i++){
-        Civilization act_civil = botCivilizations.at(i);
+        Civilization act_civil = nations_unknown.at(i);
         if((dist_x == act_civil.dist_x) and (dist_y == act_civil.dist_y)){
             continue;
         }
@@ -194,6 +195,10 @@ void Civilization::addNationKnown(){
             if((dist_y-explored_s)<act_civil.dist_y) found_y = 1;
         }else{
             if((dist_y+explored_n)>act_civil.dist_y) found_y = 1;
+        }
+        if(found_x and found_y){
+            nations_known.push_back(act_civil.identifier);
+            nations_unknown.erase(nations_unknown.begin()+i);
         }
     }
 }
@@ -397,7 +402,9 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 
 
 // Funcoes relativas ao gerenciamento de NPCs
-BotIA::BotIA(){
+BotIA::BotIA(Civilization& Obj1, King& Obj2){
+    BotCivilization = &Obj1;
+    BotKing = &Obj2;
 }
 
 // Funcoes relativas ao andamento do jogo
@@ -533,6 +540,10 @@ void generateOtherCivilizations(){
                 count++;
             }
         }
+    }
+    int size = botCivilizations.size();
+    for(int i = 0; i < size; i++){
+        botCivilizations.at(i).setNationsUnknown();
     }
 }
 
