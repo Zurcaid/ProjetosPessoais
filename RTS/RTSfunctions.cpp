@@ -57,8 +57,6 @@ Civilization::Civilization(int a, int b, int c)
 {
 	kind = a;
 	king = b;
-	King Emperor(0,0,0,0,0,0,0,"0");
-	Emperor = kings.at(kind).at(king);
 	location = c;
 	alignment = kings.at(a).at(b).alignment;
 }
@@ -161,7 +159,6 @@ void Civilization::monthlyUpdates(){
 }
 
 
-
 // Funcoes relativas ao gerenciamento de reis
 //a=kingdom,b=age,c=max_age,d=hp,e=dmg,f=alignment,g=troop_capacity,h=name;
 King::King(int a, int b, int c, int d, int e, int f, int g, string h){
@@ -175,6 +172,10 @@ King::King(int a, int b, int c, int d, int e, int f, int g, string h){
 	troop_capacity = g;
 }
 
+void Civilization::defineEmperor(){
+	Emperor = new King(0,0,0,0,0,0,0,"0");
+	*Emperor = kings.at(kind).at(king);
+}
 
 
 // Funcoes relativas ao gerenciamento de comandantes
@@ -452,6 +453,7 @@ void startNewPlayer(){
 			            king_selected = inputnumber;
 			            PlayerKingdom.king = king_selected;
 			            PlayerKingdom.kind = kind_selected;
+			            PlayerKingdom.defineEmperor();
 			        }
 			    }else{
 			        cin.clear();
