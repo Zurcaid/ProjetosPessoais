@@ -46,7 +46,7 @@ vector<vector<Champions>> commanders = {{MiyamotoMusashi,Spartacus}, {JonathanJo
 
 vector<vector<Troops>> soldier= {{Knight_1,Archer_1,Shielder_1,Horse_1}, {Cleric_1,HolyArcher_1,Paladin_1,Falcon_1}, {Goblin_1,RangedGoblin_1,Slime_1,Bat_1}, {Believer_1,ArcherBeliever_1,Penitent_1,ElementalSpirit_1}, {Summon_1,Mage_1,Caster_1,WolfSummon_1}, {Droid_1, RangedDroid_1,Barrier_1,Drone_1}, {Parasite_1,Bacteria_1,Flesh_1,ZombieWolf_1}};
 
-vector<vector<Buildings>> constructions = {{FruitFarm1, AnimalFarm1}, {FruitFarm1, AnimalFarm1}};
+vector<vector<Buildings>> constructions = {{}, {}, {}, {}, {}, {}, {}, {}};
 
 vector<Civilization> botCivilizations;
 vector<BotIA> NPCs;
@@ -134,13 +134,13 @@ void Civilization::monthlyUpdates(){
 	if((food-population) < 0){
 		storage1 = population-food;
 		food = 0;
-		if((raw_food-storage1) < 0){
-			storage2 = population-raw_food;
+		if(((raw_food/2)-storage1) < 0){
+			storage2 = storage1-(raw_food/2);
 			raw_food = 0;
 			population -= storage2/2;
 			aproval -= aproval/(population/storage2);
 		}else{
-			raw_food -= storage1;
+			raw_food -= storage1*2;
 		}
 	}else{
 		food -= population;
@@ -308,51 +308,49 @@ Army::Army(Champions leader, int leader_row, int moral, Troops row1, int row1_qn
 
 
 // Funcoes relativas ao gerenciamento de construcoes
-// t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen,wc=wood_cost,stone_c=stone_cost,steel_c=steel_cost;
-// Setor 1: Estruturas relacionadas ao consumo ou producao de material.
-// Setor 2: Outras estruturas (hospitais, escolas, etc).
-Buildings::Buildings(int t1, float ap, int pop, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int m, int n, int o, int p, int q, int r, int s, int t, int u, int t2, int wc, int stone_c, int steel_c, string nm)
+
+// t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name;
+Buildings(int t1, int nvl, int a, int b, int c, string nm)
 {
-	name = nm;
-	tech_req = t1;
-	aproval = ap;
-	population = pop;
-	kind = a;
-	sector = b;
-	kingdom = c;
-	cost = d;
-	wood_cost = wc;
-	stone_cost = stone_c;
-	steel_cost = steel_c;
-	money = e;
-	gear = k;
-	steel = l;
-	paper = m;
-	chemicals = n;
-	food = o;
-	worker = p;
-	farmworker = q;
-	extractivist = r;
-	shopkeeper = s;
-	troops = t;
-	troops_num = u;
-	tech_gen = t2;
-	if (b == 1)
-	{
-		ores = f;
-		wood = g;
-		stone = h;
-		raw_food = i;
-		products = j;
-	}
-	else
-	{
-		teacher = f;
-		doctor = g;
-		guard = h;
-		criminal = i;
-		education = j;
-	}
+    // Setor 1: Estracao de recursos da natureza.
+    // Setor 2: Refinamento ou utilizacao dos recursos extraidos.
+    // Setor 3: Venda dos recursos ou sem relacao com os recursos e sim com as pessoas.
+    name = nm;
+    tech_req = t1;
+    lvl_req = nvl;
+    kingdom = a;
+    sector = b;
+    type_id = c;
+    if(sector == 1){ // Setor 1
+        if(type_id == 1){ // Producao de alimentos
+            
+        }else if(type_id == 2){ // Extracao de madeira
+            
+        }else if(type_id == 3){ // Extracao de pedras
+            
+        }else if(type_id == 4){ // Extracao de minerios
+            
+        }
+    }else if(sector == 2){ // Setor 2
+        if(type_id == 1){ // Industria alimenticia
+            
+        }else if(type_id == 2){ // Industria metalurgica
+            
+        }else if(type_id == 3){ // Industria quimica
+            
+        }else if(type_id == 4){ // Industria armamentista
+            
+        }else if(type_id == 5){ // Industria de bens de consumo
+        
+        }
+    }else if(sector == 3){ // Setor 3
+        if(type_id == 1){
+            
+        }
+    }
+    else{
+        cout << "Error: Bad construction setup."
+    }
 }
 
 void Buildings::buildConstruction(Civilization &Obj)
@@ -409,6 +407,10 @@ void BotIA::botTurn(){
     // Fase de exploracao
     int random1 = rand() % 4 + 1;
     BotCivilization->exploreDirection(random1);
+    int size = constructions.size();
+    for(int i = 0; i < size; i++){
+        if(BotCivilization->tech_lvl)
+    }
 }
 
 // Funcoes relativas ao andamento do jogo
