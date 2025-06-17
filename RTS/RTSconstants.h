@@ -17,8 +17,8 @@ class Civilization
 	// Caracteristicas gerais
 	int alignment; // Varia de 0 a 100
 	int xp = 0;	   // 1 lvl = 100 xp
-	int lvl;
-	int tech_lvl = 0;
+	int lvl = 1;
+	float tech_lvl = 1.0;
 	int kind, king;
 	int dist_x, dist_y;
 	King* Emperor;
@@ -152,27 +152,26 @@ class Buildings
 	int sector, type_id;
 	int kingdom;
 	int cost;
-	int wood_cost;
-	int stone_cost;
-	int steel_cost;
-	float durability = 1;
+	int wood_cost, stone_cost, steel_cost;
+	float integrity = 1;
 	int ores, wood, stone, raw_food; // Primarios
 	int products, gear, steel, paper, chemicals, food; // Secundarios
 	int money; // Terciarios
-	int tech_req, lvl_req;
+	float tech_req = 1.0;
+	int lvl_req = 1;
 	float degradation_rate;
 	float tech_gen;
-	int population;
+	int grow_rate;
 	int doctor, teacher, farmworker, shopkeeper, worker, extractivist, guard, criminal; // Empregos
-	float aproval;																		// Varia de 0 a 100
+	float aproval;
 	int education;
 	int growing_rate;
 
 	int troops, troops_num;
 	// Setor 1: Estruturas relacionadas ao consumo ou producao de material.
 	// Setor 2: Outras estruturas (hospitais, escolas, etc).
-	// t1=tech_req,nvl=lvl_req,a=kingdom,b=sector,c=type_id,nm=name;
-	Buildings(int t1, int nvl, int a, int b, int c, string nm);
+    // t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name, troop_type=troops;
+	Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_type);
 	void buildConstruction(Civilization &Obj);
 	void monthlyUpdate(Civilization &Obj);
 };
