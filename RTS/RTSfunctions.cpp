@@ -38,7 +38,7 @@ Champions Ghostrunner(5,100,100,0,300,100,100,300,70,80,150,80,100,150,50,"Ghost
 Champions Hunter(6,10000,100,0,100,500,80,105,110,110,90,110,100,200,0,"Hunter");
 
 // t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen,wc=wood_cost,stone_c=stone_cost,steel_c=steel_cost;
-Buildings FruitFarm1(0, 1.0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 2, 0, "Small animal farm"), AnimalFarm1(0, 1.0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 2, 0, "Small fruit farm");
+//Buildings FruitFarm1(0, 1.0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 2, 0, "Small animal farm"), AnimalFarm1(0, 1.0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 2, 0, "Small fruit farm");
 
 vector<vector<King>> kings = {{KingArthur,Gilgamesh,MilitaryGenius}, {GodEmperor,ChosenOne,FalseFalconOfLight}, {NamelessGodOfEvil,VampireLord,ReincarnatedDemonKing}, {WorldEater,PerfectBeing,KingOverHeaven}, {MonarchOfIllusions,KingOfShadows,StrongestSorcerer}, {SithLord,Android}, {IA,GhoulEmperor,ManInTheSuit,PerfectHomunculus}};
 
@@ -137,8 +137,8 @@ void Civilization::monthlyUpdates(){
 		if(((raw_food/2)-storage1) < 0){
 			storage2 = storage1-(raw_food/2);
 			raw_food = 0;
+			aproval -= aproval/(population/(storage2/2));
 			population -= storage2/2;
-			aproval -= aproval/(population/storage2);
 		}else{
 			raw_food -= storage1*2;
 		}
@@ -309,8 +309,8 @@ Army::Army(Champions leader, int leader_row, int moral, Troops row1, int row1_qn
 
 // Funcoes relativas ao gerenciamento de construcoes
 
-// t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name;
-Buildings(int t1, int nvl, int a, int b, int c, string nm)
+// t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name, troop_type=troops;
+Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_type = 0)
 {
     // Setor 1: Estracao de recursos da natureza.
     // Setor 2: Refinamento ou utilizacao dos recursos extraidos.
@@ -321,35 +321,78 @@ Buildings(int t1, int nvl, int a, int b, int c, string nm)
     kingdom = a;
     sector = b;
     type_id = c;
+    int gen = lvl_req*tech_req;
+    int qnt_rm = gen*(-1);
+    int qnt_jobs = (gen/10)+2;
+    degradation_rate = 0.01/tech_req;
+    if(tech_req >= 3){
+        steel_cost = tech_req*lvl_req*0.9;
+        stone_cost = steel_cost*2;
+        cost = (steel_cost+stone_cost)/2;
+    }else{
+        wood_cost = lvl_req*2;
+        stone_cost = wood_cost*0.8;
+        cost = (wood_cost+stone_cost)/2;
+    }
     if(sector == 1){ // Setor 1
         if(type_id == 1){ // Producao de alimentos
-            
+            raw_food = gen;
+            farmworker = qnt_jobs;
         }else if(type_id == 2){ // Extracao de madeira
-            
+            wood = gen;
+            extractivist = qnt_jobs;
         }else if(type_id == 3){ // Extracao de pedras
-            
+            stone = gen;
+            extractivist = qnt_jobs;
         }else if(type_id == 4){ // Extracao de minerios
-            
+            ores = gen;
+            extractivist = qnt_jobs;
         }
     }else if(sector == 2){ // Setor 2
         if(type_id == 1){ // Industria alimenticia
-            
+            raw_food = qnt_rm;
+            food = gen;
+            worker = qnt_jobs;
         }else if(type_id == 2){ // Industria metalurgica
-            
+            ores = qnt_rm;
+            steel = gen;
+            worker = qnt_jobs;
         }else if(type_id == 3){ // Industria quimica
-            
+            wood = qnt_rm;
+            chemicals = gen;
+            worker = qnt_jobs;
         }else if(type_id == 4){ // Industria armamentista
-            
+            steel = qnt_rm;
+            gear = gen;
+            worker = qnt_jobs;
         }else if(type_id == 5){ // Industria de bens de consumo
-        
+            wood = qnt_rm;
+            chemicals = gen;
+            worker = qnt_jobs;
+        }else if(type_id == 6){ // Institutos de pesquisa
+            money = qnt_rm;
+            tech_gen = gen/40;
+            worker = qnt_jobs;
         }
     }else if(sector == 3){ // Setor 3
-        if(type_id == 1){
+        if(type_id == 1){ // Comercios gerais
+            products = qnt_rm;
+            money = gen;
+            shopkeeper = qnt_jobs;
+        }else if(type_id == 2){ // Hospitais
+            money = qnt_rm
+            grow_rate = gen/5;
+            doctor = qnt_jobs;
+        }else if(type_id == 3){ // Escolas
+            
+        }else if(type_id == 4){ // Prisoes/postos de policia
+            
+        }else if(type_if == 5){ // Academias para reinamento de soldados
             
         }
     }
     else{
-        cout << "Error: Bad construction setup."
+        cout << "Error: Bad construction setup.";
     }
 }
 
@@ -360,33 +403,33 @@ void Buildings::buildConstruction(Civilization &Obj)
 	Obj.stone -= stone_cost;
 	Obj.steel -= steel_cost;
 	Obj.aproval = Obj.aproval * aproval;
-	Obj.worker = worker;
-	Obj.farmworker = farmworker;
-	Obj.extractivist = extractivist;
-	Obj.shopkeeper = shopkeeper;
-	Obj.worker = worker;
-	Obj.farmworker = farmworker;
-	Obj.extractivist = extractivist;
-	Obj.shopkeeper = shopkeeper;
-	Obj.guard = guard;
-	position = Obj.buildings.size();
+	Obj.worker += worker;
+	Obj.farmworker += farmworker;
+	Obj.extractivist += extractivist;
+	Obj.shopkeeper += shopkeeper;
+	Obj.worker += worker;
+	Obj.farmworker += farmworker;
+	Obj.extractivist += extractivist;
+	Obj.shopkeeper += shopkeeper;
+	Obj.guard += guard;
+	position += Obj.buildings.size();
 	Obj.buildings.push_back(*this);
 }
 void Buildings::monthlyUpdate(Civilization &Obj)
 {
 	int storage;
-	durability -= 0.008;
-	Obj.tech_lvl += tech_gen * durability;
-	Obj.money += money * durability;
-	Obj.gear += gear * durability;
-	Obj.steel += steel * durability;
-	Obj.paper += paper * durability;
-	Obj.chemicals += chemicals * durability;
-	Obj.food += food * durability;
-	Obj.ores += ores * durability;
-	Obj.wood += wood * durability;
-	Obj.stone += stone * durability;
-	Obj.raw_food += raw_food * durability;
+	integrity -= degradation_rate;
+	Obj.tech_lvl += tech_gen * integrity;
+	Obj.money += money * integrity;
+	Obj.gear += gear * integrity;
+	Obj.steel += steel * integrity;
+	Obj.paper += paper * integrity;
+	Obj.chemicals += chemicals * integrity;
+	Obj.food += food * integrity;
+	Obj.ores += ores * integrity;
+	Obj.wood += wood * integrity;
+	Obj.stone += stone * integrity;
+	Obj.raw_food += raw_food * integrity;
 	Obj.setTroops(troops, troops_num);
 	if(criminal!=0){
 		storage = criminal;
@@ -409,7 +452,9 @@ void BotIA::botTurn(){
     BotCivilization->exploreDirection(random1);
     int size = constructions.size();
     for(int i = 0; i < size; i++){
-        if(BotCivilization->tech_lvl)
+        if(BotCivilization->tech_lvl){
+            
+        }
     }
 }
 
