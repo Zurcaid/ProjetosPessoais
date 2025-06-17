@@ -110,7 +110,7 @@ class Champions
 
 	int archery_boost, melee_boost, defender_boost, beast_boost;
 	int dmg_boost, hp_boost, foodcost_boost, moral_boost;
-	// a=kingdom,b=capacity,c=loyalty,d=xp,e=dmg,f=hp,g=archery_boost,h=melee_boost,i=defender_boost,j=beast_boost,k=dmg_boost,l=hp_boost,m=foodcost_boost,n=moral_boost, o=alignment,p=name;
+	// a=kingdom,b=capacity,c=loyalty,d=xp,e=dmg,f=hp,g=archery_boost,h=melee_boost,i=defender_boost,j=beast_boost,k=dmg_boost,l=hp_boost,m=foodcost_boost,n=moral_boost, o=alignment,p=name
 	Champions(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int m, int n, int o, string p);
 	void changeXp(int x);
 	void monthlyUpdate(Civilization Obj1);
@@ -148,19 +148,19 @@ class Buildings
 {
   public:
 	string name;
-	int kind;
 	int position;
-	int sector;
+	int sector, type_id;
 	int kingdom;
 	int cost;
 	int wood_cost;
 	int stone_cost;
 	int steel_cost;
 	float durability = 1;
-	int money;
-	int ores, wood, stone, raw_food;				   // Primarios
+	int ores, wood, stone, raw_food; // Primarios
 	int products, gear, steel, paper, chemicals, food; // Secundarios
-	int tech_req;
+	int money; // Terciarios
+	int tech_req, lvl_req;
+	float degradation_rate;
 	float tech_gen;
 	int population;
 	int doctor, teacher, farmworker, shopkeeper, worker, extractivist, guard, criminal; // Empregos
@@ -169,11 +169,10 @@ class Buildings
 	int growing_rate;
 
 	int troops, troops_num;
-	// t1=tech_req,ap=aproval,pop=population,a=kind,b=sector,c=kingdom,d=cost,e=money,f=ores/teacher,g=wood/doctor,h=stone/guard,i=raw_food/criminal,j=products/education,k=gear,l=steel,m=paper,n=chemicals,o=food,p=worker,q=farmworker,r=extractivist,s=shopkeeper,t=troops,u=troopsnum,t2=tech_gen;
 	// Setor 1: Estruturas relacionadas ao consumo ou producao de material.
 	// Setor 2: Outras estruturas (hospitais, escolas, etc).
-	Buildings(int t1, float ap, int pop, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int m, int n, int o, int p, int q, int r, int s, int t, int u, int t2, int wc, int stone_c, int steel_c, string nm);
-
+	// t1=tech_req,nvl=lvl_req,a=kingdom,b=sector,c=type_id,nm=name;
+	Buildings(int t1, int nvl, int a, int b, int c, string nm);
 	void buildConstruction(Civilization &Obj);
 	void monthlyUpdate(Civilization &Obj);
 };
