@@ -62,18 +62,7 @@ Civilization::Civilization(int a, int b, int c, int d, int e = 1000)
 	identifier = e;
 	alignment = kings.at(a).at(b).alignment;
 }
-void Civilization::changeAlignment(int x)
-{
-	alignment += x;
-}
-void Civilization::changeXp(int x)
-{
-	xp += x;
-}
-void Civilization::changeMoral(int x)
-{
-	xp += x;
-}
+
 void Civilization::setTroops(int x, int n)
 {
 	int size = troops.size();
@@ -95,14 +84,6 @@ void Civilization::setTroops(int x, int n)
 		troops.push_back(x);
 		troops_num.push_back(n);
 	}
-}
-void Civilization::setKind(int x)
-{
-	kind = x;
-}
-void Civilization::setKing(int x)
-{
-	king = x;
 }
 
 void Civilization::buildingsMonthlyUpdates()
@@ -150,6 +131,8 @@ void Civilization::monthlyUpdates(){
 	storage1 = criminal;
 	criminal = (population-(population*education))/aproval;
 	population -= (criminal-storage1);
+	aproval = aproval*(1 - criminal/population);
+	
 	if(aproval<=10) civil_war_chance+=5+((10-aproval)*10);
 	if(aproval>=70) civil_war_chance-=10;
 	if(civil_war_chance>0) civil_war_chance=0;
@@ -310,7 +293,7 @@ Army::Army(Champions leader, int leader_row, int moral, Troops row1, int row1_qn
 // Funcoes relativas ao gerenciamento de construcoes
 
 // t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name, troop_type=troops;
-Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_type = 0)
+Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_type = 0, int troop_rm = 0)
 {
     // Setor 1: Estracao de recursos da natureza.
     // Setor 2: Refinamento ou utilizacao dos recursos extraidos.
@@ -323,7 +306,7 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
     type_id = c;
     int gen = lvl_req*tech_req;
     int qnt_rm = gen*(-1);
-    int qnt_jobs = (gen/10)+2;
+    int worker = (gen/10)+2;
     degradation_rate = 0.01/tech_req;
     if(tech_req >= 3){
         steel_cost = tech_req*lvl_req*0.9;
@@ -337,58 +320,51 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
     if(sector == 1){ // Setor 1
         if(type_id == 1){ // Producao de alimentos
             raw_food = gen;
-            farmworker = qnt_jobs;
         }else if(type_id == 2){ // Extracao de madeira
             wood = gen;
-            extractivist = qnt_jobs;
         }else if(type_id == 3){ // Extracao de pedras
             stone = gen;
-            extractivist = qnt_jobs;
         }else if(type_id == 4){ // Extracao de minerios
             ores = gen;
-            extractivist = qnt_jobs;
         }
     }else if(sector == 2){ // Setor 2
         if(type_id == 1){ // Industria alimenticia
             raw_food = qnt_rm;
             food = gen;
-            worker = qnt_jobs;
         }else if(type_id == 2){ // Industria metalurgica
             ores = qnt_rm;
             steel = gen;
-            worker = qnt_jobs;
         }else if(type_id == 3){ // Industria quimica
             wood = qnt_rm;
             chemicals = gen;
-            worker = qnt_jobs;
         }else if(type_id == 4){ // Industria armamentista
             steel = qnt_rm;
             gear = gen;
-            worker = qnt_jobs;
         }else if(type_id == 5){ // Industria de bens de consumo
             wood = qnt_rm;
             chemicals = gen;
-            worker = qnt_jobs;
         }else if(type_id == 6){ // Institutos de pesquisa
             money = qnt_rm;
             tech_gen = gen/40;
-            worker = qnt_jobs;
         }
     }else if(sector == 3){ // Setor 3
         if(type_id == 1){ // Comercios gerais
             products = qnt_rm;
             money = gen;
-            shopkeeper = qnt_jobs;
         }else if(type_id == 2){ // Hospitais
-            money = qnt_rm
+            money = qnt_rm;
+            health = gen;
             grow_rate = gen/5;
-            doctor = qnt_jobs;
         }else if(type_id == 3){ // Escolas
-            
+            money = qnt_rm/2;
+            education = gen;
         }else if(type_id == 4){ // Prisoes/postos de policia
-            
-        }else if(type_if == 5){ // Academias para reinamento de soldados
-            
+            criminal = worker*-3;
+        }else if(type_id == 5){ // Academias para reinamento de soldados
+            troops_remove = troop_rm;
+            troops = troop_type;
+            troops_num = worker;
+            worker = (troops_num/30)+1;
         }
     }
     else{
@@ -404,14 +380,6 @@ void Buildings::buildConstruction(Civilization &Obj)
 	Obj.steel -= steel_cost;
 	Obj.aproval = Obj.aproval * aproval;
 	Obj.worker += worker;
-	Obj.farmworker += farmworker;
-	Obj.extractivist += extractivist;
-	Obj.shopkeeper += shopkeeper;
-	Obj.worker += worker;
-	Obj.farmworker += farmworker;
-	Obj.extractivist += extractivist;
-	Obj.shopkeeper += shopkeeper;
-	Obj.guard += guard;
 	position += Obj.buildings.size();
 	Obj.buildings.push_back(*this);
 }
@@ -431,15 +399,19 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 	Obj.stone += stone * integrity;
 	Obj.raw_food += raw_food * integrity;
 	Obj.setTroops(troops, troops_num);
+	
+	Obj.education += education/Obj.population;
+	if(Obj.education > 1) Obj.education = 1.0;
+
+	Obj.health += health/Obj.population;
+	if(Obj.health > 1) Obj.health = 1;
 	if(criminal!=0){
 		storage = criminal;
-		if(criminal > Obj.population) storage=Obj.population;
+		if(criminal > Obj.criminal) storage = Obj.criminal;
 		Obj.criminal += storage;
 		Obj.population -= storage;
 	}
 }
-
-
 
 // Funcoes relativas ao gerenciamento de NPCs
 BotIA::BotIA(Civilization& Obj1, King& Obj2){
