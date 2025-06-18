@@ -39,7 +39,7 @@ class Civilization
 	// Populacao
 	int population = 10;
 	int worker, criminal;
-	int aproval = 50;
+	int aproval = 70;
 	int civil_war_chance = 0;
 	float growing_rate = 0.0;
 	int students;
