@@ -131,11 +131,15 @@ void Civilization::monthlyUpdates(){
 	storage1 = criminal;
 	criminal = (population-(population*education))/aproval;
 	population -= (criminal-storage1);
+	
 	aproval = aproval*(1 - criminal/population);
+	aproval = aproval*(0.3 + education/population);
+	aproval = aproval*(0.3 + health/population);
+	if(aproval < 0) aproval = 0;
+	if(aproval > 100) aproval = 100;
 	
 	if(aproval<=10) civil_war_chance+=5+((10-aproval)*10);
-	if(aproval>=70) civil_war_chance-=10;
-	if(civil_war_chance>0) civil_war_chance=0;
+	if(aproval>=70) civil_war_chance-=5;
 	if(civil_war_chance>=100){
 		civilWar();
 	}
@@ -318,53 +322,71 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
         cost = (wood_cost+stone_cost)/2;
     }
     if(sector == 1){ // Setor 1
-        if(type_id == 1){ // Producao de alimentos
-            raw_food = gen;
-        }else if(type_id == 2){ // Extracao de madeira
-            wood = gen;
-        }else if(type_id == 3){ // Extracao de pedras
-            stone = gen;
-        }else if(type_id == 4){ // Extracao de minerios
-            ores = gen;
+        switch(type_id){
+            case 1: // Producao de alimentos
+                raw_food = gen;
+                break;
+            case 2: // Extracao de madeira
+                wood = gen;
+                break;
+            case 3: // Extracao de pedras
+                stone = gen;
+                break;
+            case 4: // Extracao de minerios
+                ores = gen;
+                break;
         }
     }else if(sector == 2){ // Setor 2
-        if(type_id == 1){ // Industria alimenticia
-            raw_food = qnt_rm;
-            food = gen;
-        }else if(type_id == 2){ // Industria metalurgica
-            ores = qnt_rm;
-            steel = gen;
-        }else if(type_id == 3){ // Industria quimica
-            wood = qnt_rm;
-            chemicals = gen;
-        }else if(type_id == 4){ // Industria armamentista
-            steel = qnt_rm;
-            gear = gen;
-        }else if(type_id == 5){ // Industria de bens de consumo
-            wood = qnt_rm;
-            chemicals = gen;
-        }else if(type_id == 6){ // Institutos de pesquisa
-            money = qnt_rm;
-            tech_gen = gen/40;
+        switch(type_id){
+            case 1: // Industria alimenticia
+                raw_food = qnt_rm;
+                food = gen;
+                break;
+            case 2: // Industria metalurgica
+                ores = qnt_rm;
+                steel = gen;
+                break;
+            case 3: // Industria quimica
+                wood = qnt_rm;
+                chemicals = gen;
+                break;
+            case 4: // Industria armamentista
+                steel = qnt_rm;
+                gear = gen;
+                break;
+            case 5: // Industria de bens de consumo
+                wood = qnt_rm;
+                chemicals = gen;
+                break;
+            case 6:  // Institutos de pesquisa
+                money = qnt_rm;
+                tech_gen = gen/40;
+                break;
         }
     }else if(sector == 3){ // Setor 3
-        if(type_id == 1){ // Comercios gerais
-            products = qnt_rm;
-            money = gen;
-        }else if(type_id == 2){ // Hospitais
-            money = qnt_rm;
-            health = gen;
-            grow_rate = gen/5;
-        }else if(type_id == 3){ // Escolas
-            money = qnt_rm/2;
-            education = gen;
-        }else if(type_id == 4){ // Prisoes/postos de policia
-            criminal = worker*-3;
-        }else if(type_id == 5){ // Academias para reinamento de soldados
-            troops_remove = troop_rm;
-            troops = troop_type;
-            troops_num = worker;
-            worker = (troops_num/30)+1;
+        switch(type_id){
+            case 1: // Comercios gerais
+                products = qnt_rm;
+                money = gen;
+                break;
+            case 2: // Hospitais
+                money = qnt_rm;
+                health = gen;
+                grow_rate = gen/5;
+                break;
+            case 3: // Escolas
+                money = qnt_rm/2;
+                education = gen;
+                break;
+            case 4: // Prisoes/postos de policia
+                criminal = worker*-3;
+                break;
+            case 5: // Academias para reinamento de soldados
+                troops_remove = troop_rm;
+                troops = troop_type;
+                troops_num = worker;
+                worker = (troops_num/10)+1;
+                break;
         }
     }
     else{
@@ -374,14 +396,17 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
 
 void Buildings::buildConstruction(Civilization &Obj)
 {
+    int food_necessity = Obj.population/((Obj.food*2)+Obj.raw_food+Obj.population);
+    int health_necessity = Obj.population/((Obj.health*4)+Obj.population);
 	Obj.money -= cost;
 	Obj.wood -= wood_cost;
 	Obj.stone -= stone_cost;
 	Obj.steel -= steel_cost;
-	Obj.aproval = Obj.aproval * aproval;
 	Obj.worker += worker;
 	position += Obj.buildings.size();
 	Obj.buildings.push_back(*this);
+	if(((sector == 1) and (type_id == 1)) or ((sector == 2) and (type_id == 1))) Obj.aproval += 20*food_necessity;
+	if((sector == 3) and (type_id == 2)) Obj.aproval += 15*health_necessity;
 }
 void Buildings::monthlyUpdate(Civilization &Obj)
 {
