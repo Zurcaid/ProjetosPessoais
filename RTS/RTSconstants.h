@@ -38,11 +38,13 @@ class Civilization
 
 	// Populacao
 	int population = 10;
-	int doctor, teacher, farmworker, shopkeeper, worker, extractivist, guard, criminal; // Empregos
+	int worker, criminal;
 	int aproval = 50;
 	int civil_war_chance = 0;
 	float growing_rate = 0.0;
+	int students;
 	float education = 0.1;
+	float health = 0.1;
 	int war_prisoners;
 	vector<Champions> important_prisoners;
 
@@ -67,11 +69,7 @@ class Civilization
 
 	void changeAlignment(int x);
 	void defineEmperor();
-	void changeXp(int x);
-	void changeMoral(int x);
 	void setTroops(int x, int n);
-	void setKind(int x);
-	void setKing(int x);
 	void buildingsMonthlyUpdates();
 	void championsMonthlyUpdates();
 	void monthlyUpdates();
@@ -162,16 +160,17 @@ class Buildings
 	float degradation_rate;
 	float tech_gen;
 	int grow_rate;
-	int doctor, teacher, farmworker, shopkeeper, worker, extractivist, guard, criminal; // Empregos
-	float aproval;
-	int education;
+	int worker, criminal;
+	float aproval = 1.0;
+	int education, health;
 	int growing_rate;
 
 	int troops, troops_num;
+	int troops_remove;
 	// Setor 1: Estruturas relacionadas ao consumo ou producao de material.
 	// Setor 2: Outras estruturas (hospitais, escolas, etc).
     // t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name, troop_type=troops;
-	Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_type);
+	Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_type, int troop_rm);
 	void buildConstruction(Civilization &Obj);
 	void monthlyUpdate(Civilization &Obj);
 };
