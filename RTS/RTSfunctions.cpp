@@ -767,4 +767,140 @@ void startNewPlayer()
 		cin >> input1;
 		cout << "Are you sure your character's name is: '" << input1 << "' ?\n1 - Yes.\n2 - No.\nYour choice: ";
 		cin >> input2;
-		if (input2
+		if (input2 == "1")
+		{
+			PlayerKingdom.emperor_name = input1;
+		}
+	}
+	while (PlayerKingdom.civilization_name == "")
+	{
+		cout << end_of_page;
+		cout << "Digit the name of your empire: ";
+		cin >> input1;
+		cout << "Are you sure the your empire's name is: '" << input1 << "' ?\n1 - Yes.\n2 - No.\nYour choice: ";
+		cin >> input2;
+		if (input2 == "1")
+		{
+			PlayerKingdom.civilization_name = input1;
+		}
+	}
+	int king_selected = 100;
+	int kind_selected;
+	int inputnumber;
+	if (style == 2)
+	{
+		while (king_selected == 100)
+		{
+			cout << end_of_page;
+			cout << "Choose a civilization kind:\n0 - Human\n1 - Holy\n2 - Evil\n3 - Deity\n4 - Witchcraft\n5 - Technology\n6 - Biotechnology\nChoose one to see the types of king you can select: ";
+			while (!(cin >> kind_selected))
+			{
+				cout << "No option selected, choose again.\n";
+				cout << end_of_page;
+				cout << "Choose a civilization kind:\n0 - Human\n1 - Holy\n2 - Evil\n3 - Deity\n4 - Witchcraft\n5 - Technology\n6 - Biotechnology\nChoose one to see the types of king you can select: ";
+				cin.clear();
+				cin.ignore(10000, '\n');
+			}
+			if ((kind_selected >= 0) and (kind_selected <= 6))
+			{
+				vector<King> kingdom_kind = kings.at(kind_selected);
+				int size = kingdom_kind.size();
+				cout << "Available title options available for this kind of kingdom:\n";
+				for (int i = 0; i < size; i++)
+				{
+					King king_kind = kingdom_kind.at(i);
+					cout << "\n Title number " << i << ": ";
+					cout << "Name: " << king_kind.name;
+					cout << " - Alignment: " << king_kind.alignment;
+					cout << " - Troop capacity when fighting: " << king_kind.troop_capacity;
+					cout << " - Stats(*lvl): HP: " << king_kind.hp << " DMG: " << king_kind.dmg;
+				}
+				cout << "\nSelect the title number (anything other than the number to exit to civilization selection)\nYour choice: ";
+				if (cin >> inputnumber)
+				{
+					if ((inputnumber >= 0) and (inputnumber < size))
+					{
+						king_selected = inputnumber;
+						PlayerKingdom.king = king_selected;
+						PlayerKingdom.kind = kind_selected;
+						PlayerKingdom.defineEmperor();
+					}
+				}
+				else
+				{
+					cin.clear();
+					cin.ignore(10000, '\n');
+				}
+			}
+			else
+			{
+				cout << "No option selected, choose again.\n";
+			}
+		}
+	}
+}
+
+void generateOtherCivilizations()
+{
+	int count = 0;
+	int size1 = kings.size(); // Quantidade de estilos de civilizacao
+	int possible_kinds[7][4];
+	for (int i1 = 0; i1 < size1; i1++)
+	{
+		int size2 = kings.at(i1).size();
+		for (int i2 = 0; i2 < size2; i2++)
+		{
+			possible_kinds[i1][i2] = 1;
+		}
+	}
+	possible_kinds[PlayerKingdom.kind][PlayerKingdom.king] = 0;
+	if (style == 1)
+		size1 = 1;
+	for (int i1 = 0; i1 < size1; i1++)
+	{
+		int size2 = kings.at(i1).size();
+		for (int i2 = 0; i2 < size2; i2++)
+		{
+			if (possible_kinds[i1][i2] != 1)
+			{
+				continue;
+			}
+			if (difficulty == 1)
+			{
+				int x = (rand() % 10000) - 5000;
+				while (x == 0)
+				{
+					x = (rand() % 10000) - 5000;
+				}
+				int y = (rand() % 3000) - 1500;
+				Civilization KingdomNPC(i1, i2, x, y, count);
+				KingdomNPC.defineEmperor();
+				botCivilizations.push_back(KingdomNPC);
+				count++;
+			}
+		}
+	}
+	int size = botCivilizations.size();
+	for (int i = 0; i < size; i++)
+	{
+		botCivilizations.at(i).setNationsUnknown();
+	}
+}
+
+void startNPCS()
+{
+}
+
+void newGame()
+{
+	startNewPlayer();
+	generateOtherCivilizations();
+}
+
+void loadGame()
+{
+}
+
+void playerTurn()
+{
+}
