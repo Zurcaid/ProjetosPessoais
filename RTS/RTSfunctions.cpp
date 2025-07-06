@@ -618,7 +618,7 @@ void BotIA::botBuild()
 	}
 	cost_necessity += stone_necessity + steel_necessity + wood_necessity;
 	float money_necessity = (cost_necessity*lvl*BotCivilization->tech_lvl) / BotCivilization->money;
-	
+
 	vector<float> necessities = {food_necessity, health_necessity, tech_necessity, chem_necessity, troop_necessity, gear_necessity, stone_necessity, wood_necessity, steel_necessity, money_necessity};
 	size = necessities.size();
 	vector<int> order;
@@ -645,7 +645,7 @@ void BotIA::botBuild()
 		int unemployed = (population - BotCivilization->worker) - BotCivilization->criminal;
 		int build = 0;
 		int necessity = order.at(i1);
-		if(necessity == 0){
+		if(necessity == 0){ // Comida
 			for(int i2 = 4; i2 >= 0; i2 -= 1){
 				Buildings* actual_building = &medieval_buildings.at(1).at(i2);
 				if(BotCivilization->raw_food > actual_building->raw_food){
@@ -661,13 +661,53 @@ void BotIA::botBuild()
 			}
 		}
 		else{
-			for(int i3 = (4+(5*necessity)); i3 > (-1+(5*necessity)); i3 -= 1){
-				Buildings* actual_building = &medieval_buildings.at(necessity).at(i3);
-				if(unemployed > actual_building->worker)	
-					build = actual_building->buildConstruction(*BotCivilization);
-				if(build == 1) 
+			int pos_in_array, build_sector;
+			switch (necessity){
+				case 1: // Saude
+					pos_in_array = 5;
+					build_sector = 2;
 					break;
-			}	
+				case 2: // tecnologia
+					pos_in_array = 25;
+					build_sector = 1;
+					break;
+				case 3: // Produtos quimicos
+					pos_in_array = 10;
+					build_sector = 1;
+					break;
+				case 4: // Tropas
+					// Para tropas a configuracao e diferente
+					pos_in_array = 0;
+					build_sector = 0;
+					break;
+				case 5: // Equipamento
+					pos_in_array = 15;
+					build_sector = 1;
+					break;
+				case 6: // Pedra
+					pos_in_array = 10;
+					build_sector = 0;
+					break;
+				case 7: // Madeira
+					pos_in_array = 5;
+					build_sector = 0;
+					break;
+				case 8:	// Metal
+					pos_in_array = 5;
+					build_sector = 1;
+					break;
+				case 9: // Dinheiro
+					pos_in_array = 0;
+					build_sector = 2;
+					break;
+			}
+			for(int i3 = (pos_in_array+4); i3 >= (pos_in_array); i3 -= 1){
+				Buildings* actual_building = &medieval_buildings.at(build_sector).at(i3);
+				if(unemployed > actual_building->worker)
+					build = actual_building->buildConstruction(*BotCivilization);
+				if(build == 1)
+					break;
+			}
 		}
 	}
 }
