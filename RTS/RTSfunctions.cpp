@@ -645,53 +645,29 @@ void BotIA::botBuild()
 		int unemployed = (population - BotCivilization->worker) - BotCivilization->criminal;
 		int build = 0;
 		int necessity = order.at(i1);
-		switch(necessity){
-			case 0:
-				for(int i2 = 4; i2 >= 0; i2 -= 1){
-					Buildings* actual_building = &medieval_buildings.at(1).at(i2);
-					if(BotCivilization->raw_food > actual_building->raw_food){
-						if(unemployed > actual_building->worker)
-							build = actual_building->buildConstruction(*BotCivilization);
-					}else{
-						actual_building = &medieval_buildings.at(0).at(i2);
-						if(unemployed > actual_building->worker)
-							build = actual_building->buildConstruction(*BotCivilization);
-					}
-					if(build == 1)
-						break;
-				}
-				break;
-			case 1:
-				for(int i2 = 9; i2 > 4; i2 -= 1){
-					Buildings* actual_building = &medieval_buildings.at(2).at(i2);
+		if(necessity == 0){
+			for(int i2 = 4; i2 >= 0; i2 -= 1){
+				Buildings* actual_building = &medieval_buildings.at(1).at(i2);
+				if(BotCivilization->raw_food > actual_building->raw_food){
 					if(unemployed > actual_building->worker)
-						build = actual_building->buildConstruction(*BotCivilization)
+						build = actual_building->buildConstruction(*BotCivilization);
+				}else{
+					actual_building = &medieval_buildings.at(0).at(i2);
+					if(unemployed > actual_building->worker)
+						build = actual_building->buildConstruction(*BotCivilization);
 				}
-				break;
-			case 2:
-			
-				break;
-			case 3:
-			
-				break;
-			case 4:
-			
-				break;
-			case 5:
-				
-				break;
-			case 6:
-			
-				break;
-			case 7:
-				
-				break;
-			case 8:
-				
-				break;
-			case 9:
-				
-				break;
+				if(build == 1)
+					break;
+			}
+		}
+		else{
+			for(int i3 = (4+(5*necessity)); i3 > (-1+(5*necessity)); i3 -= 1){
+				Buildings* actual_building = &medieval_buildings.at(necessity).at(i3);
+				if(unemployed > actual_building->worker)	
+					build = actual_building->buildConstruction(*BotCivilization);
+				if(build == 1) 
+					break;
+			}	
 		}
 	}
 }
