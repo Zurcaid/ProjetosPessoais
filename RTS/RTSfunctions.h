@@ -47,30 +47,31 @@ string medieval_troops_list[4][3][6] = {
 	 {"Longbowman", "Crossbowman", "Mounted Archer", "Arquebusier", "Musketeer", "Hand Cannonier"},
 	 {"Light Infantryman", "Rifleman", "Gatling Gunner", "Sniper", "Machine Gunner", "Spec Ops Sniper"}},
 
-	{{"Shield bearer", "Phalanx Hoplite", "Chariot Protector"},
-	 {"Doppelsoldner", "Halberdier Guard", "Cuirassier Defender"},
-	 {"Riot Shield Trooper", "Body Armor Unit", "Ballistic Shield Unit"}},
+	{{"Shield bearer", "Phalanx Hoplite", "Chariot Protector", "0", "0", "0"},
+	 {"Doppelsoldner", "Halberdier Guard", "Cuirassier Defender", "0", "0", "0"},
+	 {"Riot Shield Trooper", "Body Armor Unit", "Ballistic Shield Unit", "0", "0", "0"}},
 
-	{{"War Dogs Pack", "Camel Rider", "Chariot scout"},
-	 {"Knight's Destrier", "Cuirassier", "Cataphract"},
-	 {"Armored Car", "Gatling Gun Carriage", "Battle Tank"}}};
+	{{"War Dogs Pack", "Camel Rider", "Chariot scout", "0", "0", "0"},
+	 {"Knight's Destrier", "Cuirassier", "Cataphract", "0", "0", "0"},
+	 {"Armored Car", "Gatling Gun Carriage", "Battle Tank", "0", "0", "0"}}};
 
 string medieval_buildings_list[3][6][5] = {
 	{{"Small swidden", "Peasents croft", "Feudal manor", "Mechanized ranch", "Agroindustrial complex"},
 	{"Forest foraging wood storage", "Medieval woodlot", "Logging camp", "Steam-powered lumber mill", "Industrial logging operation center"},
 	{"Flint knapping camp", "Small stone quarry", "Iron reinforced quarry", "Dynamite quarry", "Mechanized Granite Complex"},
-	{"Mineral gathering camp", "Surface mine", "Basic underground mine", "Blasting mine", "Precision mine"}},
+	{"Mineral gathering camp", "Surface mine", "Basic underground mine", "Blasting mine", "Precision mine"}, {"0", "0", "0", "0", "0"}, {"0", "0", "0", "0", "0"}},
 	
 	{{"Grain mill", "Comunal bakery", "Canned food factory", "Frozen food factory", "Automated food production plant"},
 	{"Primitive iron forge", "Catalan forge", "Blast furnace", "Charcoal ironworks", "Automated steel mill facility"},
 	{"Ancient apothecary", "Asclepeion", "Monastic alchemy", "Penincillin production plant", "Automated molecular synthetsizer"},
 	{"Bronze weapon foundry", "Iron weapon smithy", "Steel weapon workshop", "Standardized Musket Factory", "CNC precision weapon facility"},
+	{"Artisan workshop", "Domestic Handloom", "Carpentry workshop", "Industrial furniture factory", "Automated factory"},
 	{"Temple-library", "Philosophical academy", "Monastic school", "Technical institute", "National science foundation"}},
 	
 	{{"Merchant tent", "Trade guild hall", "Auction hall", "Wholesale market hall", "Distribution center"},
 	{"Healing temple", "Monastic infirmary", "General hospital", "Polyclinic", "Medical-city complex"},
 	{"Temple-school", "Library of scrolls", "Cathedral school", "Monitorial school", "Corporate university"},
 	{"Guard barracks", "Dungeon keep", "Fortress guardhouse", "Penintentiary", "Maximum security prison"},
-	{"'s recruitment center"}}};
+	{"'s recruitment center","0","0","0","0"}, {"0","0","0","0","0"}}};
 
 #endif
