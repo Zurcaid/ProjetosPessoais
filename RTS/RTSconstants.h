@@ -21,7 +21,7 @@ class Civilization
 	float tech_lvl = 1.0;
 	int kind, king;
 	int dist_x, dist_y;
-	King* Emperor;
+	King *Emperor;
 	string emperor_name, civilization_name;
 	int identifier;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
@@ -30,7 +30,7 @@ class Civilization
 	// Recursos
 	int money = 0;
 	int ores, wood, stone, raw_food;		 // Primarios
-	int gear, steel, paper, chemicals, food; // Secundarios
+	int gear, steel, chemicals, food; // Secundarios
 
 	// Construcoes
 	vector<Buildings> buildings;
@@ -60,16 +60,17 @@ class Civilization
 
 	vector<Champions> champions;
 	vector<vector<Army>> armys; // Exercitos
-	
-	vector<int> troops; // Tropas no pais
+
+	vector<int> troops;		// Tropas no pais
+	vector<int> troops_kind;	// Tipo de tropa
 	vector<int> troops_num; // Quantidade de cada tropa
 
-    //a=kind,b=king;c=dist_x;d=dist_y
+	//a=kind,b=king;c=dist_x;d=dist_y
 	Civilization(int a, int b, int c, int d, int e);
 
 	void changeAlignment(int x);
 	void defineEmperor();
-	void setTroops(int x, int n);
+	void setTroops(int x, int k, int n);
 	void buildingsMonthlyUpdates();
 	void championsMonthlyUpdates();
 	void monthlyUpdates();
@@ -91,7 +92,7 @@ class King
 	int hp = 10;
 	int dmg = 10;
 	//a=kingdom,b=age,c=max_age,d=hp,e=dmg, f=alignment,g=troop_capacity,h=name;
-	King(int a, int b, int c, int d, int e,int f, int g, string h);
+	King(int a, int b, int c, int d, int e, int f, int g, string h);
 };
 
 class Champions
@@ -138,7 +139,7 @@ class Army
 	int front_row = 1;
 	int food_cost;
 	int kingdom;
-	
+
 	Army(Champions leader, int leader_row, int moral, Troops row1, int row1_qnt, Troops row2, int row2_qnt, Troops row3, int row3_qnt);
 };
 
@@ -152,9 +153,9 @@ class Buildings
 	int cost;
 	int wood_cost, stone_cost, steel_cost;
 	float integrity = 1;
-	int ores, wood, stone, raw_food; // Primarios
+	int ores, wood, stone, raw_food;				   // Primarios
 	int products, gear, steel, paper, chemicals, food; // Secundarios
-	int money; // Terciarios
+	int money;										   // Terciarios
 	float tech_req = 1.0;
 	int lvl_req = 1;
 	float degradation_rate;
@@ -165,24 +166,21 @@ class Buildings
 	int education, health;
 	int growing_rate;
 
-	int troops, troops_num;
+	int troops_kind, troops, troops_num;
 	int troops_remove;
-	// Setor 1: Estruturas relacionadas ao consumo ou producao de material.
-	// Setor 2: Outras estruturas (hospitais, escolas, etc).
-    // t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name, troop_type=troops;
-	Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_type, int troop_rm);
-	void buildConstruction(Civilization &Obj);
+	// t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name, troop_type=troops;
+	Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_kind, int troop_type, int troop_rm);
+	int buildConstruction(Civilization &Obj);
 	void monthlyUpdate(Civilization &Obj);
 };
 
 class BotIA
 {
-    int npc_type;
-    
-    Civilization* BotCivilization;
-    King* BotKing;
-    BotIA(Civilization& Obj1, King& Obj2);
-    void botTurn();
+	Civilization *BotCivilization;
+	King *BotKing;
+	BotIA(Civilization &Obj1, King &Obj2);
+	void botBuild();
+	void botTurn();
 };
 
 #endif
