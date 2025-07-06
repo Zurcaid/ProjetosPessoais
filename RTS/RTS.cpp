@@ -1,6 +1,6 @@
 #include "RTSconstants.h"
 #include "RTSfunctions.h"
-// #include "RTSfunctions.cpp"
+#include "RTSfunctions.cpp"
 #include <iostream>
 using namespace std;
 
@@ -28,7 +28,7 @@ int main()
 		{
 			month = month - 12;
 			year += 1;
-		}
+	 	}
 		playerTurn();
 		cin >> input;
 	}
