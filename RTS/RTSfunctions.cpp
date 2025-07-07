@@ -6,7 +6,7 @@ using namespace std;
 #include <vector>
 #include <cstdlib>
 
-string input1, input2, input3;
+string input, input1, input2, input3;
 
 vector<vector<King>> kings = {{ProphesiedKing, KingOfKings, Conqueror}, {GodEmperor, ChosenOne, BringerOfLight}, {NamelessGodOfEvil, VampireLord, DemonKing}, {WorldEater, PerfectBeing, KingOverHeaven}, {MonarchOfIllusions, LordOfShadows, StrongestSorcerer}, {SithLord, Android, EmperorOfSteel}, {IA, MonsterKing, ManInTheSuit, PerfectHomunculus}};
 
@@ -603,7 +603,7 @@ void BotIA::botBuild()
 		war_power += troop_power * BotCivilization->troops_num.at(i);
 	}
 
-	float troop_necessity = (population / lvl) / (war_power);
+	float troop_necessity = (population / lvl) / (war_power)+(Botcivilization->war*0.5);
 	float gear_necessity = ((troop_necessity*lvl*BotCivilization->tech_lvl)/2) / BotCivilization->gear;
 	float cost_necessity = food_necessity + health_necessity + troop_necessity + gear_necessity;
 	float stone_necessity = (cost_necessity*2*lvl) / BotCivilization->stone;
@@ -677,8 +677,8 @@ void BotIA::botBuild()
 					break;
 				case 4: // Tropas
 					// Para tropas a configuracao e diferente
-					pos_in_array = 0;
-					build_sector = 0;
+					pos_in_array = 20;
+					build_sector = 2;
 					break;
 				case 5: // Equipamento
 					pos_in_array = 15;
@@ -701,12 +701,37 @@ void BotIA::botBuild()
 					build_sector = 2;
 					break;
 			}
-			for(int i3 = (pos_in_array+4); i3 >= (pos_in_array); i3 -= 1){
-				Buildings* actual_building = &medieval_buildings.at(build_sector).at(i3);
-				if(unemployed > actual_building->worker)
-					build = actual_building->buildConstruction(*BotCivilization);
-				if(build == 1)
-					break;
+			if(necessity == 4){
+				int size = BotCivilization->troops.size();
+				int qnt_array[4] = {0,0,0,0};
+				int troop_necessited;
+				for(int i = 0; i < size; i++){
+					qnt_array[BotCivilization->troops_kind.at(i)] += BotCivilization->troops_num.at(i);
+				}
+				for(int i = 0; i < 4; i++){
+					if(qnt_array[troop_necessited] < qnt_array[i]){
+						troop_necessited = i;
+					}
+				}
+				size = medieval_buildings.at(build_sector).size();
+				vector<int> buildings_pos;
+				for(int i = size-1; i >= pos_in_array; i -= 1){
+					if(medieval_buildings.at(build_sector).at(i).troops_kind == troop_necessited){
+						Buildings* actual_building = &medieval_buildings.at(build_sector).at(i);
+						if(unemployed >= actual_building->worker)
+							build = actual_building->buildConstruction(*BotCivilization);
+						if(build == 1)
+							break;
+					}
+				}
+			}else{
+				for(int i3 = (pos_in_array+4); i3 >= (pos_in_array); i3 -= 1){
+					Buildings* actual_building = &medieval_buildings.at(build_sector).at(i3);
+					if(unemployed >= actual_building->worker)
+						build = actual_building->buildConstruction(*BotCivilization);
+					if(build == 1)
+						break;
+				}
 			}
 		}
 	}
@@ -917,6 +942,43 @@ void loadGame()
 {
 }
 
-void playerTurn()
+void worldLog()
 {
 }
+
+// Codigo para funcoes: 0 - Falha; 1 - Funcionamento normal; >100: Informacao nos ultimos dois digitos
+
+int playerExplore(){
+	cout << "Select a direction to send explorers:\n1 - North\n2 - South\n3 - East\n 4 - West\nAny other thing to cancel\nYour choice: ";
+	cin >> input;
+	if((input == "1") and (playerKingdom.explored_n >= 5000)){
+		cout << "\nExplorer sent successfully."
+		return 101;
+	}else if((input == "2") and (playerKingdom.explored_s >= 5000)){
+		cout << "\nExplorer sent successfully."
+		return 102;
+	}else if((input == "3") and (playerKingdom.explored_e >= 5000)){
+		cout << "\nExplorer sent successfully."
+		return 103;
+	}else if((input == "4") and (playerKingdom.explored_w >= 5000)){{
+		cout << "\nExplorer sent successfully."
+		return 104;
+	}else{
+		if((input != "1") and (input != "2") and  (input != "3") and  (input != "4")){
+			cout << "\nNo option selected."
+		}else{
+			cout << "\nYou have already reached the border of the island in this direction."
+		}
+		return 0;
+	}
+}
+
+void playerTurn()
+{
+	int alreadyExplored, directionToExplore, buildingsMade;
+	worldLog();
+	cout << "Kingdom: " << playerKingdom.civilization_name "\n";
+	cout << "Actions: "
+	cin >> input;
+}
+
