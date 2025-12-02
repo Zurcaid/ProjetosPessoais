@@ -6,7 +6,7 @@ These values can be changed in order to evaluate the functions
 #define CHANNEL A0
 #define led 8
 const uint16_t samples = 64; //This value MUST ALWAYS be a power of 2
-const float samplingFrequency = 100; //Hz, must be less than 10000 due to ADC
+const float samplingFrequency = 200; //Hz, must be less than 10000 due to ADC
 unsigned int sampling_period_us;
 unsigned long microseconds;
 
@@ -24,6 +24,9 @@ ArduinoFFT<float> FFT = ArduinoFFT<float>(vReal, vImag, samples, samplingFrequen
 #define SCL_TIME 0x01
 #define SCL_FREQUENCY 0x02
 #define SCL_PLOT 0x03
+
+int count = 0;
+float med = 0;
 
 void setup()
 {
@@ -51,13 +54,13 @@ void loop()
   FFT.compute(FFTDirection::Forward); /* Compute FFT */
   FFT.complexToMagnitude(); /* Compute magnitudes */
   
-  Serial.println("Computed magnitudes:");
+//  Serial.println("Computed magnitudes:");
   PrintVector(vReal, (samples >> 1), SCL_FREQUENCY);  
   
-  float x = FFT.majorPeak();
-  Serial.println(x); //Print out what frequency is the most dominant.
+//  float x = FFT.majorPeak();
+//  Serial.println(x); //Print out what frequency is the most dominant.
   
-   delay(200); /* Repeat after delay */
+//   delay(200); /* Repeat after delay */
 //  while(1);/
 }
 
@@ -82,12 +85,26 @@ void PrintVector(float *vData, uint16_t bufferSize, uint8_t scaleType)
 
     // 0Hz - 0; 3Hz - 1; 6hz - 2; 10Hz - 3; 13hz - 4; 15Hz - 5; 19Hz - 6; 21Hz - 7; 25Hz - 8; 28Hz - 9; 31Hz - 10; On sample frequency of 200
     // Value = Amplitude*1500
-    Serial.print(abscissa);
-    if(scaleType==SCL_FREQUENCY)
-      Serial.print("Hz");
-      Serial.print(i);
-    Serial.print(" ");
-    Serial.println(vData[i]);
+//    Serial.print(abscissa);
+//    if(scaleType==SCL_FREQUENCY)
+//      Serial.print("Hz");
+//      Serial.print(i);
+//    Serial.print(" ");
+    if(i == 3){
+      if(count > 2){
+        Serial.print(med/3);
+        if((med/3) > 2){
+          digitalWrite(led, HIGH);
+        }else{
+          digitalWrite(led, LOW);
+        }
+        count = 0;
+        med = 0;
+      }     
+      med += vData[3]/1500;
+      count += 1;
+    }
+//    Serial.println(vData[3]/1500);
   }
   Serial.println();
 }
