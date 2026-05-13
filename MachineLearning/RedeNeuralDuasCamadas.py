@@ -3,44 +3,44 @@ import random
 
 def Sigmoid(x):
     return 1/(1+pow(math.e, -x))
-    
+
 def Derivative(y):
     return y*(1-y)
-    
+
 class Neuron:
     def __init__(self):
         self.entry = []
         self.weight = []
         self.sum_value = 0
         self.activation_value = 0
-    
+
     def AddEntry(self, n, w):
         for i in range(n):
             self.entry.append(0)
             if(w==0):
                 self.weight.append(w)
             else:
-                self.weight.append(random.uniform(-1, 1))
+                self.weight.append(random.uniform(-0.5, 0.5))
 
-        
+
     def ChangeWeight(self, nw):
         for i in range(len(self.weight)):
             self.weight[int(i)] += nw
-            
+
     def SumFunction(self):
         self.sum_value = 0
         for i in range(len(self.entry)):
             self.sum_value += self.entry[i]*self.weight[i]
-            
+
     def StepFunction(self):
         self.activation_value = Sigmoid(self.sum_value)
         if self.sum_value > 1:
             return 0
         else:
             return 1
-            
-learning_rate = 0.03
-momentum = 0.9
+
+learning_rate = 0.3
+momentum = 0.55
 previous_variation = 0
 accuracy = 0
 epochs = 100000
@@ -99,28 +99,28 @@ for e in range(epochs):
                     if(e==epochs-1):
                         print("XOR: ", xor_test_list[-1][i])
                         print("Rede: ", n.activation_value)
-                                        
+
     for i in range(len(result_list[-1][0])):
         error_list.append((xor_test_list[-1][i]-result_list[-1][0][i]))
         error_avg += abs(error_list[i])
         delta_list[-1][0].append(Derivative(result_list[-1][0][i])*error_list[i])
-        
+
     for k_weight in range(len(node_layer[-1][0].weight)-1):
         actual_weight = node_layer[-1][0].weight[k_weight]
         entry_value = 0                
         for l_case in range(len(result_list[-2][k_weight])):
-            
+
             entry_value += result_list[-2][k_weight][l_case]*delta_list[-1][0][l_case]
         actual_variation = (momentum*previous_variation) + (entry_value*learning_rate)
         #node_layer[-1][0].weight[k_weight] = (actual_weight*momentum)+(entry_value*learning_rate)
         node_layer[-1][0].weight[k_weight] = actual_weight + actual_variation
         previous_variation = actual_variation
-        
+
     error_avg = error_avg/len(error_list)
     for i_neuron in range(len(result_list[0])):
         for j_case in range(len(result_list[0][i_neuron])):
             delta_list[0][i_neuron].append(Derivative(result_list[0][i_neuron][j_case])*node_layer[1][0].weight[i_neuron]*delta_list[1][0][j_case])
-    
+
     for i_layer in range(len(node_layer)-2, -1, -1):
         for j_neuron in range(len(node_layer[i_layer])):
             for k_weight in range(len(node_layer[i_layer][j_neuron].weight)-1):
@@ -136,23 +136,41 @@ for e in range(epochs):
                 #node_layer[i_layer][j_neuron].weight[k_weight] = (actual_weight*momentum)+(entry_value*learning_rate)
                 node_layer[i_layer][j_neuron].weight[k_weight] = actual_weight + actual_variation
                 previous_variation = actual_variation
-                
-    
+
+
     print("AVG Error: ", error_avg)
-                
+
 wish_to_continue = True
 user_answer = "n"
 
 
 while(wish_to_continue):
-    n0.entry[0] = int(input("Digite a primeira entrada do neurônio (porta and): "))
-    n0.entry[1] = int(input("Digite a segunda entrada do neurônio (porta and): "))
-    n0.SumFunction()
-    if(n0.StepFunction() == 1):
-        print("A saída é 1")
+    entrada1 = int(input("Digite a primeira entrada (porta XOR): "))
+    entrada2 = int(input("Digite a segunda entrada (porta XOR): "))
+    for layer in range(len(node_layer)):
+        if(layer==0):
+            for n in node_layer[0]:             
+                neuron_pos = node_layer[0].index(n)      
+                n.entry[0] = entrada1
+                n.entry[1] = entrada2
+                n.entry[2] = 1
+                n.SumFunction()
+                n.StepFunction()
+                result_list[layer][neuron_pos].append(n.activation_value)                    
+        else:
+            for n in node_layer[layer]:
+                neuron_pos = node_layer[layer].index(n)
+                for n_previous in range(len(node_layer[layer-1])):
+                    n.entry[n_previous] = node_layer[layer-1][n_previous].activation_value
+                n.entry[-1] = 1
+                n.SumFunction()
+                n.StepFunction()
+    if(node_layer[-1][0].activation_value > 0.5):
+        print(" A saída é 1. \n Certeza de: ", (node_layer[-1][0].activation_value*100))
     else:
-        print("A saída é 0")
+        print(" A saída é 0. \n Certeza de: ", (100-(node_layer[-1][0].activation_value*100)))
+    
     user_answer = input("Deseja continuar? (s para sim, n para não) ")
     if(user_answer == "n"):
         wish_to_continue = False
-    
+        
