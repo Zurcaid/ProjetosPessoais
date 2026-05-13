@@ -40,7 +40,7 @@ class Neuron:
             return 1
             
 learning_rate = 0.03
-momentum = 0.98
+momentum = 0.9
 previous_variation = 0
 accuracy = 0
 epochs = 100000
@@ -104,6 +104,7 @@ for e in range(epochs):
         error_list.append((xor_test_list[-1][i]-result_list[-1][0][i]))
         error_avg += abs(error_list[i])
         delta_list[-1][0].append(Derivative(result_list[-1][0][i])*error_list[i])
+        
     for k_weight in range(len(node_layer[-1][0].weight)-1):
         actual_weight = node_layer[-1][0].weight[k_weight]
         entry_value = 0                
@@ -114,6 +115,7 @@ for e in range(epochs):
         #node_layer[-1][0].weight[k_weight] = (actual_weight*momentum)+(entry_value*learning_rate)
         node_layer[-1][0].weight[k_weight] = actual_weight + actual_variation
         previous_variation = actual_variation
+        
     error_avg = error_avg/len(error_list)
     for i_neuron in range(len(result_list[0])):
         for j_case in range(len(result_list[0][i_neuron])):
@@ -125,14 +127,14 @@ for e in range(epochs):
                 actual_weight = node_layer[i_layer][j_neuron].weight[k_weight]
                 entry_value = 0
                 if(i_layer==0):
-                    for l_case in xor_test_list[k_weight]:
-                        entry_value += l_case*delta_list[0][j_neuron][l_case]
+                    for l_case in range(len(xor_test_list[k_weight])):
+                        entry_value += xor_test_list[k_weight][l_case]*delta_list[0][j_neuron][l_case]
                 else:
                     for l_case in range(len(result_list[i_layer-1][k_weight])):
                         entry_value += result_list[i_layer-1][k_weight][l_case]*delta_list[i_layer][j_neuron][l_case]
                 actual_variation = (momentum*previous_variation) + (entry_value*learning_rate)
-                node_layer[i_layer][j_neuron].weight[k_weight] = (actual_weight*momentum)+(entry_value*learning_rate)
-                #node_layer[i_layer][j_neuron].weight[k_weight] = actual_weight + actual_variation
+                #node_layer[i_layer][j_neuron].weight[k_weight] = (actual_weight*momentum)+(entry_value*learning_rate)
+                node_layer[i_layer][j_neuron].weight[k_weight] = actual_weight + actual_variation
                 previous_variation = actual_variation
                 
     
