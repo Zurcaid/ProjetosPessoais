@@ -22,21 +22,9 @@ King IA(6, 1, 2000, 100, 100, 50, 0, "The IA"), MonsterKing(6, 20, 100, 500, 500
 
 // a=kingdom,b=kind,c=ranged,d=food_cost_per_month,e=dmg,f=hp,g=size,h=name
 Troops Knight_1(0, 1, 0, 1, 10, 10, 2, "Training knight"), Archer_1(0, 2, 1, 1, 5, 5, 2, "Training archer"), Shielder_1(0, 3, 0, 2, 5, 18, 3, "Weak shielder"), Horse_1(0, 4, 0, 3, 10, 18, 5, "Horse mounted training knight");
-Troops Cleric_1(1, 1, 0, 1, 8, 12, 2, "Cleric student"), HolyArcher_1(1, 2, 1, 1, 7, 3, 2, "Training holy archer"), Paladin_1(1, 3, 0, 2, 4, 23, 3, "Paladin's disciple"), Falcon_1(1, 4, 1, 1, 5, 5, 1, "Young falcon");
-Troops Goblin_1(2, 1, 0, 0, 15, 7, 2, "Young goblin"), RangedGoblin_1(2, 2, 1, 2, 10, 7, 2, "Rock thrower goblin"), Slime_1(2, 3, 0, 0, 1, 25, 2, "Small slime"), Bat_1(2, 4, 1, 1, 3, 3, 1, "Bat");
-Troops Believer_1(3, 1, 0, 1, 8, 8, 2, "Novice believer"), ArcherBeliever_1(3, 2, 1, 1, 5, 5, 2, "Novice believer with bow"), Penitent_1(3, 3, 0, 0, 2, 25, 2, "Weak penitent"), ElementalSpirit_1(3, 4, 0, 0, 10, 10, 1, "Young elemental spirit");
-Troops Summon_1(4, 1, 0, 0, 8, 8, 2, "Weak summoned clone"), Mage_1(4, 2, 1, 2, 10, 3, 2, "Mage Apprentice"), Caster_1(4, 3, 0, 2, 0, 30, 3, "Apprentice shield caster"), WolfSummon_1(4, 4, 0, 0, 10, 5, 1, "Weak summoned wolf");
-Troops Droid_1(5, 1, 0, 0, 6, 6, 1, "Small battle droid"), RangedDroid_1(5, 2, 1, 0, 6, 3, 1, "Small ranged droid"), Barrier_1(5, 3, 0, 0, 0, 30, 3, "Weak mobile barrier"), Drone_1(5, 4, 1, 0, 10, 1, 1, "Weak combat drone");
-Troops Parasite_1(6, 1, 0, 0, 10, 1, 1, "Small weak parasite"), Bacteria_1(6, 2, 1, 2, 1, 1, 0, "Weak air propagant bacteria colony"), Flesh_1(6, 3, 0, 0, 2, 20, 2, "Weak flesh wall"), ZombieWolf_1(6, 4, 0, 1, 10, 5, 1, "Zombie dog");
 
 // a=kingdom,b=capacity,c=loyalty,d=xp,e=dmg,f=hp,g=archery_boost,h=melee_boost,i=defender_boost,j=beast_boost,k=dmg_boost,l=hp_boost,m=foodcost_boost,n=moral_boost,o=alignment, p=name;
 Champions MiyamotoMusashi(0, 30, 90, 0, 100, 100, 250, 250, 100, 80, 200, 100, 80, 150, 50, "Miyamoto Musashi"), Spartacus(0, 12000, 90, 0, 150, 200, 90, 105, 105, 90, 100, 100, 70, 130, 50, "Spartacus");
-Champions JonathanJoestar(1, 10, 80, 0, 200, 200, 110, 150, 150, 150, 150, 200, 100, 200, 100, "Jonathan Joestar"), FatherMozgus(1, 1000, 80, 0, 30, 200, 100, 100, 120, 90, 90, 120, 80, 150, 30, "Father Mozgus");
-Champions PyramidHead(2, 100, 100, 0, 200, 200, 100, 150, 200, 150, 100, 150, 0, 100, 0, "Pyramid Head");
-Champions Indra(3, 500, 60, 0, 150, 150, 100, 110, 110, 200, 110, 120, 100, 110, 50, "Indra Otsukitsuki");
-Champions Miraak(4, 1000, 60, 0, 200, 200, 110, 95, 95, 110, 105, 100, 100, 100, 50, "Miraak");
-Champions Ghostrunner(5, 100, 100, 0, 300, 100, 100, 300, 70, 80, 150, 80, 100, 150, 50, "Ghostrunner");
-Champions Hunter(6, 10000, 100, 0, 100, 500, 80, 105, 110, 110, 90, 110, 100, 200, 0, "Hunter");
 
 string medieval_troops_list[4][3][6] = {
 	{{"Club Fighter", "Stone Axe Warrior", "Bronze Swordsman", "Hoplite", "Legionary", "Charior Swordsman"},
@@ -73,5 +61,104 @@ string medieval_buildings_list[3][6][5] = {
 	{"Temple-school", "Library of scrolls", "Cathedral school", "Monitorial school", "Corporate university"},
 	{"Guard barracks", "Dungeon keep", "Fortress guardhouse", "Penintentiary", "Maximum security prison"},
 	{"'s recruitment center","0","0","0","0"}, {"0","0","0","0","0"}}};
+
+string names_male[200] = {
+        "James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles",
+        "Christopher", "Daniel", "Matthew", "Anthony", "Mark", "Donald", "Steven", "Paul", "Andrew", "Joshua",
+        "Kenneth", "Kevin", "Brian", "George", "Edward", "Ronald", "Timothy", "Jason", "Jeffrey", "Ryan",
+        "Jacob", "Gary", "Nicholas", "Eric", "Jonathan", "Stephen", "Larry", "Justin", "Scott", "Brandon",
+        "Benjamin", "Samuel", "Gregory", "Alexander", "Frank", "Patrick", "Raymond", "Jack", "Dennis", "Jerry",
+        "Tyler", "Aaron", "Jose", "Adam", "Nathan", "Henry", "Douglas", "Zachary", "Peter", "Kyle",
+        "Ethan", "Walter", "Noah", "Jeremy", "Christian", "Keith", "Roger", "Terry", "Gerald", "Ethan",
+        "Arthur", "Albert", "Carl", "Lawrence", "Dylan", "James", "John", "Oliver", "Lucas", "Liam",
+        "Mason", "Logan", "Alexander", "Ethan", "Jacob", "Michael", "Daniel", "Henry", "Jackson", "Sebastian",
+        "Aiden", "Matthew", "Samuel", "David", "Joseph", "Carter", "Owen", "Wyatt", "John", "Jack",
+        "Luke", "Oliver", "Harry", "George", "Noah", "Leo", "Arthur", "Oscar", "Charlie", "Freddie",
+        "Thomas", "William", "Henry", "Alfio", "Archie", "Joshua", "Alexander", "Ethan", "Lucas", "Isaac",
+        "Liam", "Noah", "William", "James", "Oliver", "Benjamin", "Lucas", "Henry", "Alexander", "Mason",
+        "Michael", "Ethan", "Daniel", "Jacob", "Logan", "Jackson", "Levi", "Sebastian", "Mateo", "Jack",
+        "Alasdair", "Graham", "Ian", "Colin", "Neil", "Cameron", "Duncan", "Rory", "Lachlan", "Fiona",
+        "Connor", "Sean", "Liam", "Patrick", "Ryan", "Cillian", "Darragh", "Eoin", "Finn", "Roan",
+        "Hans", "Jürgen", "Stefan", "Klaus", "Dieter", "Matthias", "Lukas", "Maximilian", "Leon", "Finn",
+        "Louis", "Lucas", "Léo", "Gabriel", "Arthur", "Hugo", "Jules", "Maël", "Raphaël", "Nathan",
+        "Mateo", "Santiago", "Matías", "Sebastián", "Diego", "Alejandro", "Nicolás", "Samuel", "Benjamin", "Daniel",
+        "Giovanni", "Luca", "Marco", "Matteo", "Alessandro", "Leonardo", "Davide", "Mattia", "Lorenzo", "Francesco"
+    };
+string names_female[200] = {
+        "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen",
+        "Nancy", "Lisa", "Betty", "Margaret", "Sandra", "Ashley", "Kimberly", "Emily", "Donna", "Michelle",
+        "Carol", "Amanda", "Dorothy", "Melissa", "Deborah", "Stephanie", "Rebecca", "Sharon", "Laura", "Cynthia",
+        "Kathleen", "Amy", "Shirley", "Angela", "Helen", "Anna", "Brenda", "Pamela", "Nicole", "Emma",
+        "Samantha", "Katherine", "Christine", "Debra", "Rachel", "Catherine", "Carolyn", "Janet", "Ruth", "Maria",
+        "Heather", "Diane", "Virginia", "Julie", "Joyce", "Victoria", "Olivia", "Kelly", "Christina", "Lauren",
+        "Joan", "Evelyn", "Judith", "Megan", "Cheryl", "Andrea", "Hannah", "Martha", "Jacqueline", "Frances",
+        "Gloria", "Ann", "Teresa", "Kathryn", "Sara", "Janice", "Jean", "Alice", "Madison", "Doris",
+        "Abigail", "Julia", "Judy", "Grace", "Janice", "Emma", "Olivia", "Ava", "Isabella", "Sophia",
+        "Charlotte", "Mia", "Amelia", "Harper", "Evelyn", "Abigail", "Emily", "Ella", "Elizabeth", "Camila",
+        "Luna", "Sofia", "Avery", "Mila", "Aria", "Scarlett", "Penelope", "Layla", "Chloe", "Victoria",
+        "Emma", "Olivia", "Lily", "Amelia", "Isla", "Ava", "Mia", "Ivy", "Freya", "Grace",
+        "Mary", "Jennifer", "Jessica", "Sarah", "Emily", "Emma", "Olivia", "Sophia", "Isabella", "Ava",
+        "Chloe", "Charlotte", "Amelia", "Grace", "Lily", "Mia", "Evie", "Ruby", "Ella", "Maya",
+        "Fiona", "Isla", "Skye", "Maisie", "Catriona", "Siobhan", "Saoirse", "Aisling", "Niamh", "Caoimhe",
+        "Sinead", "Ciara", "Roisin", "Maeve", "Clodagh", "Eimear", "Orla", "Cara", "Erin", "Tara",
+        "Emma", "Mia", "Sofia", "Hannah", "Emilia", "Anna", "Marie", "Lina", "Mila", "Leonie",
+        "Chloé", "Manon", "Emma", "Louise", "Alice", "Léa", "Lina", "Mila", "Camille", "Léna",
+        "Sofía", "Valentina", "Isabella", "Camila", "Luciana", "Mariana", "Victoria", "Martina", "Daniela", "Natalia",
+        "Giulia", "Chiara", "Francesca", "Federica", "Sara", "Alice", "Aurora", "Sofia", "Emma", "Giorgia"
+    };
+
+string sobrenomes[500] = {
+        "Smith", "Jarrett", "Jones", "Johnston", "Irons", "Wilson", "Taylor", "Glover", "Horton", "Taylor",
+        "Brown", "Smith", "Hulme", "Brown", "Williams", "Higgins", "Hurst", "Hutton", "Hodges", "Jones",
+        "Dixon", "Irvine", "Smith", "Hughes", "Houghton", "Horne", "Hurst", "Thompson", "Taylor", "Day",
+        "Johns", "Johnson", "Hale", "Wright", "Janes", "Williams", "Irving", "Howarth", "Glover", "Guest",
+        "Hinds", "Hale", "Hopkins", "Smith", "Howarth", "Davies", "Burke", "Hill", "Homer", "Wilson",
+        "Howe", "Hutchinson", "Goodwin", "Doyle", "Hobbs", "Walker", "Humphreys", "Horton", "Hyatt", "Evans",
+        "Hoyle", "Iles", "Evans", "Gould", "Jackson", "Hooper", "Hutchings", "Hunt", "Hollaway", "Irlam",
+        "Green", "Hollaway", "Jeavons", "Davies", "Roberts", "Hutchins", "White", "Goodwin", "Hurd", "Harding",
+        "Wood", "Goddard", "Hodges", "Hirst", "Green", "Johnstone", "Hope", "Howard", "Hardy", "Walker",
+        "Brown", "Jacques", "Horne", "Hamer", "Goddard", "Hall", "Hancock", "Davenport", "Jackson", "Evans",
+        "Jowett", "Clarke", "Hutchinson", "Hudson", "Hustwayte", "Hurst", "Green", "Howitt", "Hustwayte", "Johns",
+        "Inman", "Taylor", "Healy", "Robinson", "Greenwood", "Hicks", "Hinds", "Ingram", "Jones", "Hurst",
+        "Griffin", "Hudson", "Islip", "Hunt", "Hopkinson", "Humphries", "Brown", "Giles", "Hitchcock", "Wright",
+        "Horrobin", "Ingham", "Hulme", "Hussain", "Jagger", "Healy", "Hoyle", "Smith", "Inman", "Giles",
+        "Jones", "Griffin", "White", "Hutchinson", "Ingram", "Hill", "Taylor", "Hughes", "Glover", "Hustwayte",
+        "Hale", "Humphreys", "Hubbard", "Ions", "Hopkinson", "Hustwayte", "Ingram", "Hook", "Hutchings", "Hopkins",
+        "Horrobin", "Thompson", "Jellicoe", "Hubbard", "Howells", "Walker", "Walker", "Iles", "Iles", "Iles",
+        "Griffin", "Hale", "Gould", "Jackson", "Francis", "Goodwin", "Howells", "Harding", "Jeffrey", "Howells",
+        "Hall", "Jowett", "Davenport", "Howarth", "Hinds", "Taylor", "Hyde", "Ingle", "Jenks", "Hutchins",
+        "Wood", "White", "Hoyle", "Humphries", "Hodgkinson", "Hurst", "Innes", "Fletcher", "Hirst", "Jagger",
+        "Jones", "Harding", "Jackson", "Hodge", "Hopkinson", "Inglis", "Jones", "Davies", "Smith", "Hargreaves",
+        "Hurst", "Jefferies", "Hulme", "Horrobin", "Houldsworth", "Goodwin", "Irvine", "Jackson", "Hicks", "Hinds",
+        "Jameson", "Hinds", "Homer", "Williams", "Humphries", "Jones", "Hamer", "Doyle", "Irwin", "Hook",
+        "Taylor", "Hopkinson", "Evans", "Jeavons", "Hinds", "Hurst", "Hutchings", "Howells", "Jameson", "Hutchinson",
+        "Hutchinson", "Hulme", "Dixon", "Irlam", "Hutchins", "Hinds", "Johns", "Walker", "Humphreys", "Homer",
+        "Jones", "Fletcher", "Hughes", "Glover", "Hitchcock", "Hollaway", "Jolliffe", "Evans", "Hinds", "Hopkins",
+        "Jeffcoate", "Williams", "Irvine", "Davies", "Hamer", "Hargreaves", "Hussain", "Hirst", "Hutton", "Hickman",
+        "Wilson", "Howells", "Howell", "Hill", "Healy", "Goddard", "Doyle", "Howells", "Houldsworth", "Ingham",
+        "Hurlstone", "Wright", "Hurlstone", "Robinson", "Davies", "Walker", "Williams", "Irons", "Hutchinson", "Hale",
+        "Hurlstone", "Hurst", "Hinds", "Goodwin", "Homer", "Howell", "Hoyle", "Homer", "Evans", "Hale",
+        "Jeffcoate", "Islip", "Hulme", "Howarth", "Glover", "Hutchinson", "Hirst", "Hitchcock", "Hinds", "Hurst",
+        "Hulme", "Hussain", "Jagger", "Healy", "Hoyle", "Smith", "Inman", "Giles", "Jones", "Griffin",
+        "White", "Hutchinson", "Ingram", "Hill", "Taylor", "Hughes", "Glover", "Hustwayte", "Hale", "Humphreys",
+        "Hubbard", "Ions", "Hopkinson", "Hustwayte", "Ingram", "Hook", "Hutchings", "Hopkins", "Horrobin", "Thompson",
+        "Jellicoe", "Hubbard", "Howells", "Walker", "Walker", "Iles", "Iles", "Iles", "Griffin", "Hale",
+        "Gould", "Jackson", "Francis", "Goodwin", "Howells", "Harding", "Jeffrey", "Howells", "Hall", "Jowett",
+        "Davenport", "Howarth", "Hinds", "Taylor", "Hyde", "Ingle", "Jenks", "Hutchins", "Wood", "White",
+        "Hoyle", "Humphries", "Hodgkinson", "Hurst", "Innes", "Fletcher", "Hirst", "Jagger", "Jones", "Harding",
+        "Jackson", "Hodge", "Hopkinson", "Inglis", "Jones", "Davies", "Smith", "Hargreaves", "Hurst", "Jefferies",
+        "Hulme", "Horrobin", "Houldsworth", "Goodwin", "Irvine", "Jackson", "Hicks", "Hinds", "Jameson", "Hinds",
+        "Homer", "Williams", "Humphries", "Jones", "Hamer", "Doyle", "Irwin", "Hook", "Taylor", "Hopkinson",
+        "Evans", "Jeavons", "Hinds", "Hurst", "Hutchings", "Howells", "Jameson", "Hutchinson", "Hutchinson", "Hulme",
+        "Dixon", "Irlam", "Hutchins", "Hinds", "Johns", "Walker", "Humphreys", "Homer", "Jones", "Fletcher",
+        "Hughes", "Glover", "Hitchcock", "Hollaway", "Jolliffe", "Evans", "Hinds", "Hopkins", "Jeffcoate", "Williams",
+        "Irvine", "Davies", "Hamer", "Hargreaves", "Hussain", "Hirst", "Hutton", "Hickman", "Wilson", "Howells",
+        "Howell", "Hill", "Healy", "Goddard", "Doyle", "Howells", "Houldsworth", "Ingham", "Hurlstone", "Wright",
+        "Hurlstone", "Robinson", "Davies", "Walker", "Williams", "Irons", "Hutchinson", "Hale", "Hurlstone", "Hurst",
+        "Hinds", "Goodwin", "Homer", "Howell", "Hoyle", "Homer", "Evans", "Hale", "Jeffcoate", "Islip",
+        "Hulme", "Howarth", "Glover", "Hutchinson", "Hirst", "Hitchcock", "Hinds", "Hurst", "Hulme", "Hussain",
+        "Jagger", "Healy", "Hoyle", "Smith", "Inman", "Giles", "Jones", "Griffin", "White", "Hutchinson",
+        "Ingram", "Hill", "Taylor", "Hughes", "Glover", "Hustwayte", "Hale", "Humphreys", "Hubbard", "Ions"
+    };
 
 #endif

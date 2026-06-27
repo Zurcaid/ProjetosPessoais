@@ -65,7 +65,7 @@ class Civilization
 	vector<int> troops_kind;	// Tipo de tropa
 	vector<int> troops_num; // Quantidade de cada tropa
 
-	//a=kind,b=king;c=dist_x;d=dist_y
+	//a=kind,b=king;c=dist_x;d=dist_y;
 	Civilization(int a, int b, int c, int d, int e);
 
 	void changeAlignment(int x);

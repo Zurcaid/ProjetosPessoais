@@ -6,7 +6,7 @@ using namespace std;
 #include <vector>
 #include <cstdlib>
 
-string input, input1, input2, input3;
+string player_input, input1, input2, input3;
 
 vector<vector<King>> kings = {{ProphesiedKing, KingOfKings, Conqueror}, {GodEmperor, ChosenOne, BringerOfLight}, {NamelessGodOfEvil, VampireLord, DemonKing}, {WorldEater, PerfectBeing, KingOverHeaven}, {MonarchOfIllusions, LordOfShadows, StrongestSorcerer}, {SithLord, Android, EmperorOfSteel}, {IA, MonsterKing, ManInTheSuit, PerfectHomunculus}};
 
@@ -603,7 +603,7 @@ void BotIA::botBuild()
 		war_power += troop_power * BotCivilization->troops_num.at(i);
 	}
 
-	float troop_necessity = (population / lvl) / (war_power)+(Botcivilization->war*0.5);
+	float troop_necessity = ((population / lvl) / (war_power));
 	float gear_necessity = ((troop_necessity*lvl*BotCivilization->tech_lvl)/2) / BotCivilization->gear;
 	float cost_necessity = food_necessity + health_necessity + troop_necessity + gear_necessity;
 	float stone_necessity = (cost_necessity*2*lvl) / BotCivilization->stone;
@@ -950,24 +950,24 @@ void worldLog()
 
 int playerExplore(){
 	cout << "Select a direction to send explorers:\n1 - North\n2 - South\n3 - East\n 4 - West\nAny other thing to cancel\nYour choice: ";
-	cin >> input;
-	if((input == "1") and (playerKingdom.explored_n >= 5000)){
-		cout << "\nExplorer sent successfully."
+	cin >> player_input;
+	if((player_input == "1") and (PlayerKingdom.explored_n >= 5000)){
+		cout << "\nExplorer sent successfully.";
 		return 101;
-	}else if((input == "2") and (playerKingdom.explored_s >= 5000)){
-		cout << "\nExplorer sent successfully."
+	}else if((player_input == "2") and (PlayerKingdom.explored_s >= 5000)){
+		cout << "\nExplorer sent successfully.";
 		return 102;
-	}else if((input == "3") and (playerKingdom.explored_e >= 5000)){
-		cout << "\nExplorer sent successfully."
+	}else if((player_input == "3") and (PlayerKingdom.explored_e >= 5000)){
+		cout << "\nExplorer sent successfully.";
 		return 103;
-	}else if((input == "4") and (playerKingdom.explored_w >= 5000)){{
-		cout << "\nExplorer sent successfully."
+	}else if((player_input == "4") and (PlayerKingdom.explored_w >= 5000)){
+		cout << "\nExplorer sent successfully.";
 		return 104;
 	}else{
-		if((input != "1") and (input != "2") and  (input != "3") and  (input != "4")){
-			cout << "\nNo option selected."
+		if((player_input != "1") and (player_input != "2") and  (player_input != "3") and  (player_input != "4")){
+			cout << "\nNo option selected.";
 		}else{
-			cout << "\nYou have already reached the border of the island in this direction."
+			cout << "\nYou have already reached the border of the island in this direction.";
 		}
 		return 0;
 	}
@@ -977,8 +977,8 @@ void playerTurn()
 {
 	int alreadyExplored, directionToExplore, buildingsMade;
 	worldLog();
-	cout << "Kingdom: " << playerKingdom.civilization_name "\n";
-	cout << "Actions: "
-	cin >> input;
+	cout << "Kingdom: " << PlayerKingdom.civilization_name << "\n";
+	cout << "Actions: ";
+	cin >> player_input;
 }
 
