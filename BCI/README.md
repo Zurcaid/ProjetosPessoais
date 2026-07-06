@@ -1,4 +1,4 @@
-#BCI
+# BCI
 
 Código utilizado no TCC do curso técnico em eletrônica, "Desenvolvimento de um sistema de interface cérebro-máquina baseado na aquisição e processamento de dados de eletroencefalograma".
 
