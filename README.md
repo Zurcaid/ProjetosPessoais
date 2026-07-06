@@ -10,7 +10,7 @@ Ambos os códigos estão com comentários para explicar cada função do assembl
 
 ## BCI
 
-Código do TCC que desenvolvi na UFPB, o título do código "fft_arduino" é bem auto explicativo, na etapa final o trabalho precisava do processamento digital de sinais eletroencefalográficos para acionamento de uma carga, o que foi feito utilizando um arduino.
+Código do TCC que desenvolvi na UFPB, o título do código "fft_arduino.ino" é bem auto explicativo, na etapa final o trabalho precisava do processamento digital de sinais eletroencefalográficos para acionamento de uma carga, o que foi feito utilizando um arduino.
 
 ## GuitarVillain
 
