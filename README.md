@@ -36,5 +36,5 @@ Alguns códigos escritos da primeira vez que fui manipular uma esp32. A maioria 
 
 ## Outros projetos
 
-O código "wargame.c" foi um precursor do RTS, também não finalizado, escrito em C.
+O código "wargame.c" foi um precursor do projeto RTS, também não finalizado, escrito em C.
 O código "xadrez.c" também não foi finalizado (muito pouco desenvolvido na realidade), mas o intuito era desenvolver um programa de xadrez em C para rodar no terminal.
