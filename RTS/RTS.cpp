@@ -37,6 +37,8 @@ int main()
 			cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
 			botManagement.at(i).botTurn();
 		}
+
+		worldEvents();
 	}
 	return 0;
 }

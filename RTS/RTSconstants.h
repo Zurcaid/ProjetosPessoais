@@ -102,6 +102,7 @@ public:
 	void exploreDirection(int a);
 	void setNationsUnknown();
 	void addNationKnown();
+	void report();
 };
 
 class Champions
