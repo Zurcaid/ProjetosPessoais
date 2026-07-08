@@ -52,9 +52,9 @@ public:
 	string name;
 
 	// Recursos
-	int money = 0;
-	int ores, wood, stone, raw_food;  // Primarios
-	int gear, steel, chemicals, food; // Secundarios
+	int money = 100;
+	int ores = 0, wood = 100, stone = 100, raw_food = 100; // Primarios
+	int gear = 0, steel = 0, chemicals = 0, food = 0;	   // Secundarios
 
 	// Construcoes
 	vector<Buildings> buildings;
@@ -62,7 +62,7 @@ public:
 
 	// Populacao
 	int population = 10;
-	int worker, criminal;
+	int worker = 0, criminal = 0;
 	int aproval = 70;
 	int civil_war_chance = 0;
 	float growing_rate = 0.0;
@@ -159,21 +159,21 @@ public:
 	int position;
 	int sector, type_id;
 	int kingdom;
-	int cost;
-	int wood_cost, stone_cost, steel_cost;
+	int cost = 0;
+	int wood_cost = 0, stone_cost = 0, steel_cost = 0;
 	float integrity = 1;
-	int ores, wood, stone, raw_food;				   // Primarios
-	int products, gear, steel, paper, chemicals, food; // Secundarios
-	int money;										   // Terciarios
+	int ores = 0, wood = 0, stone = 0, raw_food = 0;						   // Primarios
+	int products = 0, gear = 0, steel = 0, paper = 0, chemicals = 0, food = 0; // Secundarios
+	int money = 0;															   // Terciarios
 	float tech_req = 1.0;
 	int lvl_req = 1;
-	float degradation_rate;
-	float tech_gen;
-	int grow_rate;
-	int worker, criminal;
+	float degradation_rate = 0;
+	float tech_gen = 0;
+	int grow_rate = 0;
+	int worker = 0, criminal = 0;
 	float aproval = 1.0;
-	int education, health;
-	int growing_rate;
+	int education = 0, health = 0;
+	int growing_rate = 0;
 
 	int troops_kind, troops, troops_num;
 	int troops_remove;
@@ -187,8 +187,7 @@ class BotIA
 {
 public:
 	Civilization *BotCivilization;
-	King *BotKing;
-	BotIA(Civilization &Obj1, King &Obj2);
+	BotIA(Civilization &Obj1);
 	void botBuild();
 	void botTurn();
 };

@@ -30,12 +30,11 @@ int main()
 			year += 1;
 		}
 
-		cout << "Teste";
 		playerTurn();
-		cin >> input;
 
 		for (int i = 0; i < botManagement.size(); i++)
 		{
+			cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
 			botManagement.at(i).botTurn();
 		}
 	}

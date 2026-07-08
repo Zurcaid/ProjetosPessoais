@@ -28,6 +28,12 @@ Civilization::Civilization(int a, int b, int c, int d)
 {
 	kind = a;
 	king = b;
+
+	raw_food = 100 + (rand() % 100);
+	stone = 100 + (rand() % 100);
+	wood = 100 + (rand() % 100);
+	money = 100 + (rand() % 100);
+
 	dist_x = c;
 	dist_y = d;
 	identifier = rand() % std::numeric_limits<unsigned int>::max();
@@ -502,7 +508,7 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
 
 int Buildings::buildConstruction(Civilization &Obj)
 {
-	if ((Obj.money > cost) and (Obj.wood > wood_cost) and (Obj.stone > stone_cost) and (Obj.steel > steel_cost))
+	if ((Obj.money >= cost) and (Obj.wood >= wood_cost) and (Obj.stone >= stone_cost) and (Obj.steel >= steel_cost))
 	{
 		float food_necessity = Obj.population / ((Obj.food * 2) + Obj.raw_food + Obj.population);
 		float health_necessity = Obj.population / ((Obj.health * 4) + Obj.population);
@@ -608,10 +614,9 @@ void setupBuildings()
 }
 
 // Funcoes relativas ao gerenciamento de NPCs
-BotIA::BotIA(Civilization &Obj1, King &Obj2)
+BotIA::BotIA(Civilization &Obj1)
 {
 	BotCivilization = &Obj1;
-	BotKing = &Obj2;
 }
 
 void BotIA::botBuild()
@@ -625,7 +630,7 @@ void BotIA::botBuild()
 	float chem_necessity = ((tech_necessity + health_necessity) * BotCivilization->tech_lvl * lvl) / BotCivilization->chemicals;
 
 	int size = BotCivilization->troops.size();
-	float war_power = 0.0;
+	float war_power = 0.1;
 	for (int i = 0; i < size; i++)
 	{
 		int pos = BotCivilization->troops.at(i);
@@ -658,23 +663,19 @@ void BotIA::botBuild()
 	vector<int> order;
 	for (int i1 = 0; i1 < size; i1++)
 	{
-		int necessity = necessities.at(i1);
-		if (i1 == 0)
+		float necessity = necessities.at(i1);
+		bool inserted = false;
+		for (size_t i2 = 0; i2 < order.size(); i2++)
 		{
-			order.push_back(necessity);
-		}
-		else
-		{
-			int size1 = order.size();
-			for (int i2 = 0; i2 < size1; i2++)
+			if (necessity > necessities.at(order.at(i2)))
 			{
-				if (necessity > order.at(i2))
-				{
-					order.insert(order.begin() + i2, necessity);
-					break;
-				}
+				order.insert(order.begin() + i2, i1);
+				inserted = true;
+				break;
 			}
 		}
+		if (!inserted)
+			order.push_back(i1);
 	}
 	for (int i1 = 0; i1 < 3; i1++)
 	{
@@ -743,12 +744,14 @@ void BotIA::botBuild()
 				pos_in_array = 0;
 				build_sector = 2;
 				break;
+			default:
+				break;
 			}
 			if (necessity == 4)
 			{
 				int size = BotCivilization->troops.size();
 				int qnt_array[4] = {0, 0, 0, 0};
-				int troop_necessited;
+				int troop_necessited = 0;
 				for (int i = 0; i < size; i++)
 				{
 					qnt_array[BotCivilization->troops_kind.at(i)] += BotCivilization->troops_num.at(i);
@@ -782,6 +785,7 @@ void BotIA::botBuild()
 					if (unemployed >= actual_building->worker)
 						build = actual_building->buildConstruction(*BotCivilization);
 					if (build == 1)
+
 						break;
 				}
 			}
@@ -794,6 +798,7 @@ void BotIA::botTurn()
 	// Fase de exploracao
 	int random1 = rand() % 4 + 1;
 	BotCivilization->exploreDirection(random1);
+	cout << "Bot [" << BotCivilization->identifier << "] explored direction: " << random1 << endl;
 
 	// Fase de construcao
 	botBuild();
@@ -937,7 +942,7 @@ void startNewPlayer()
 	}
 }
 
-void generateOtherCivilizations() // preciso refazer o estilo de configuracao de reis
+void generateOtherCivilizations()
 {
 	int count = 0;
 	int size1 = 100; // Quantidade de civilizacoes para criar
@@ -951,6 +956,10 @@ void generateOtherCivilizations() // preciso refazer o estilo de configuracao de
 		int y = (rand() % 3000) - 1500;
 		allCivilizations.emplace_back(0, 0, x, y);
 		allCivilizations.at(i).addEmperorTitle(0);
+	}
+	for (int i = 1; i < size1; i++)
+	{
+		botManagement.emplace_back(allCivilizations.at(i));
 	}
 
 	int size = allCivilizations.size();
@@ -1010,6 +1019,14 @@ void loadGame()
 {
 }
 
+void worldEvents()
+{
+	for (int i = 0; i < allCivilizations.size(); i++)
+	{
+		allCivilizations.at(i).monthlyUpdates();
+	}
+}
+
 void worldLog()
 {
 }
@@ -1059,6 +1076,6 @@ void playerTurn()
 	int alreadyExplored, directionToExplore, buildingsMade;
 	worldLog();
 	cout << "Kingdom: " << PlayerKingdom.civilization_name << "\n";
-	cout << "Actions: \n 1 - Explore the world.\n2 - Build a construction.\n3 - Check kingdom status.\n4 - End turn.\nYour choice: ";
+	cout << "Actions: \n1 - Explore the world.\n2 - Build a construction.\n3 - Check kingdom status.\n4 - End turn.\nYour choice: ";
 	cin >> player_input;
 }
