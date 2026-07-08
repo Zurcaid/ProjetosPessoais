@@ -54,26 +54,29 @@ Civilization *findCivilization(int id)
 
 void Civilization::setTroops(int x, int k, int n)
 {
-	int size = troops.size();
-	int pos = size;
-	for (int i = 0; i < size; i++)
-	{
-		if ((troops.at(i) == x) and (troops_kind.at(i) == k))
-		{
-			pos = i;
-			break;
-		}
-	}
-	if (pos < size)
-	{
-		troops_num.at(pos) = troops_num.at(pos) + n;
-	}
-	else
-	{
-		troops.push_back(x);
-		troops.push_back(k);
-		troops_num.push_back(n);
-	}
+	troops.push_back(x);
+	troops_kind.push_back(k);
+	troops_num.push_back(n);
+	// int size = troops.size();
+	// int pos = size;
+	// for (int i = 0; i < size; i++)
+	// {
+	// 	if ((troops.at(i) == x) and (troops_kind.at(i) == k))
+	// 	{
+	// 		pos = i;
+	// 		break;
+	// 	}
+	// }
+	// if (pos < size)
+	// {
+	// 	troops_num.at(pos) = troops_num.at(pos) + n;
+	// }
+	// else
+	// {
+	// 	troops.push_back(x);
+	// 	troops_kind.push_back(k);
+	// 	troops_num.push_back(n);
+	// }
 }
 
 void Civilization::buildingsMonthlyUpdates()
@@ -111,28 +114,25 @@ void Civilization::monthlyUpdates()
 		{
 			storage2 = storage1 - (raw_food / 2);
 			raw_food = 0;
-			if (storage2 != 0 and population != 0)
-			{
-				aproval -= aproval / (population / (storage2 / 2));
-			}
-			else if (storage2 != 0)
-			{
-				aproval -= aproval / (population / 1);
-			}
-			else
-			{
-				aproval = 1;
-			}
+			aproval -= aproval * 0.5;
 			population -= storage2 / 2;
 		}
 		else
 		{
 			raw_food -= storage1 * 2;
+			if (population > 2)
+			{
+				population += population * health / 4;
+			}
 		}
 	}
 	else
 	{
 		food -= population;
+		if (population > 2)
+		{
+			population += population * health / 4;
+		}
 	}
 	if (education <= 0)
 		education = 0.1;
@@ -250,13 +250,15 @@ void Civilization::report()
 	cout << end_of_page;
 	cout << "Civilization [" << identifier << "]\t-\tPosition: (" << dist_x << "," << dist_y << ")" << endl;
 	cout << "Level: " << lvl << "\t" << "Tech level: " << tech_lvl << endl;
-	cout << "Population: " << population << endl;
+	cout << "Population: " << population << "\tTroops: " << troops.size() << endl;
 	cout << "Money: " << money << "\tWood: " << wood << "\tStone: " << stone << "\tRaw Food: " << raw_food << endl;
+	cout << "Food: " << food << "\tSteel: " << steel << "\tChemicals: " << chemicals << "\tGear: " << gear << endl;
+	cout << "Education: " << education << "\tHealth: " << health << "\tApproval: " << aproval << " Growth rate:" << growing_rate << endl;
 	cout << "Buildings: ";
 	for (int i = 0; i < buildings.size(); i++)
-		cout << buildings.at(i).name << ", ";
-	cout << endl
-		 << end_of_page;
+		cout << buildings.at(i).name << " | ";
+	cout << endl;
+	cout << end_of_page;
 }
 
 // Funcoes relativas ao gerenciamento de reis
@@ -500,7 +502,6 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
 		switch (type_id)
 		{
 		case 1: // Comercios gerais
-			products = qnt_rm;
 			money = gen;
 			break;
 		case 2: // Hospitais
@@ -563,6 +564,10 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 	int storage;
 	integrity -= degradation_rate;
 
+	if ((Obj.money <= (money * integrity * Obj.lvl) and money < 0) or (Obj.gear <= (gear * integrity * Obj.lvl) and gear < 0) or (Obj.steel <= (steel * integrity * Obj.lvl) and steel < 0) or (Obj.chemicals <= (chemicals * integrity * Obj.lvl) and chemicals < 0) or (Obj.food <= (food * integrity * Obj.lvl) and food < 0) or (Obj.ores <= (ores * integrity * Obj.lvl) and ores < 0) or (Obj.wood <= (wood * integrity * Obj.lvl) and wood < 0) or (Obj.stone <= (stone * integrity * Obj.lvl) and stone < 0) or (Obj.raw_food <= (raw_food * integrity * Obj.lvl) and raw_food < 0))
+	{
+		return;
+	}
 	Obj.tech_lvl += tech_gen * integrity;
 	Obj.money += money * integrity * Obj.lvl;
 	Obj.gear += gear * integrity * Obj.lvl;
@@ -573,7 +578,7 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 	Obj.wood += wood * integrity * Obj.lvl;
 	Obj.stone += stone * integrity * Obj.lvl;
 	Obj.raw_food += raw_food * integrity * Obj.lvl;
-	// Obj.setTroops(troops, troops_kind, (troops_num * Obj.lvl));
+	Obj.setTroops(troops, troops_kind, (troops_num * Obj.lvl));
 
 	Obj.education += education / Obj.population;
 	if (Obj.education > 1)
@@ -649,13 +654,13 @@ BotIA::BotIA(Civilization &Obj1)
 
 void BotIA::botBuild()
 {
-	int population = BotCivilization->population;
+	float population = BotCivilization->population;
 	int lvl = BotCivilization->lvl;
 
-	float food_necessity = population / ((BotCivilization->food * 2) + BotCivilization->raw_food + population);
-	float health_necessity = population / ((BotCivilization->health * 4) + population);
-	float tech_necessity = (lvl * 4) / BotCivilization->tech_lvl;
-	float chem_necessity = ((tech_necessity + health_necessity) * BotCivilization->tech_lvl * lvl) / (BotCivilization->chemicals + 1);
+	float food_necessity = population * 3 / ((BotCivilization->food * 2) + BotCivilization->raw_food + 1);
+	float health_necessity = 1 - BotCivilization->health;
+	float tech_necessity = ((lvl / 4) * BotCivilization->tech_lvl);
+	float chem_necessity = ((tech_necessity + health_necessity) * BotCivilization->tech_lvl * lvl) / ((BotCivilization->chemicals + 1) * 5);
 
 	int size = BotCivilization->troops.size();
 	float war_power = 0.1;
@@ -667,7 +672,7 @@ void BotIA::botBuild()
 		war_power += troop_power * BotCivilization->troops_num.at(i);
 	}
 
-	float troop_necessity = ((war_power) / (war_power + population));
+	float troop_necessity = 1 + size / population;
 	float gear_necessity = ((troop_necessity * lvl * BotCivilization->tech_lvl) / 2) / (BotCivilization->gear + 1);
 	float cost_necessity = food_necessity + health_necessity + troop_necessity + gear_necessity;
 	float stone_necessity = (cost_necessity * 2 * lvl) / (BotCivilization->stone + 1);
@@ -684,8 +689,7 @@ void BotIA::botBuild()
 		steel_necessity = (((cost_necessity * lvl * BotCivilization->tech_lvl) + (gear_necessity * lvl * BotCivilization->tech_lvl) / 2)) / (BotCivilization->steel + 1);
 	}
 	cost_necessity += stone_necessity + steel_necessity + wood_necessity;
-	float money_necessity = (cost_necessity * lvl * BotCivilization->tech_lvl) / (BotCivilization->money + 1);
-
+	float money_necessity = 30 * (cost_necessity * lvl * BotCivilization->tech_lvl) / (BotCivilization->money + 1);
 	vector<float> necessities = {food_necessity, health_necessity, tech_necessity, chem_necessity, troop_necessity, gear_necessity, stone_necessity, wood_necessity, steel_necessity, money_necessity};
 	size = necessities.size();
 	cout << "Food necessity: " << food_necessity << endl;
@@ -717,14 +721,21 @@ void BotIA::botBuild()
 	}
 	for (int i1 = 0; i1 < 3; i1++)
 	{
+		int pos_in_array, build_sector;
 		int unemployed = (population - BotCivilization->worker) - BotCivilization->criminal;
 		int build = 0;
 		int necessity = order.at(i1);
 		if (necessity == 0)
 		{ // Comida
-			for (int i2 = 4; i2 >= 0; i2 -= 1)
+			build_sector = 1;
+			pos_in_array = 0;
+			if (BotCivilization->raw_food < BotCivilization->population + 100)
 			{
-				Buildings *actual_building = &medieval_buildings.at(1).at(i2);
+				build_sector = 0;
+			}
+			for (int i2 = pos_in_array + 4; i2 >= pos_in_array; i2 -= 1)
+			{
+				Buildings *actual_building = &medieval_buildings.at(build_sector).at(i2);
 				if (BotCivilization->raw_food > actual_building->raw_food)
 				{
 					if (unemployed > actual_building->worker)
@@ -732,7 +743,7 @@ void BotIA::botBuild()
 				}
 				else
 				{
-					actual_building = &medieval_buildings.at(0).at(i2);
+					actual_building = &medieval_buildings.at(build_sector).at(i2);
 					if (unemployed > actual_building->worker)
 						build = actual_building->buildConstruction(*BotCivilization);
 				}
@@ -742,7 +753,6 @@ void BotIA::botBuild()
 		}
 		else
 		{
-			int pos_in_array, build_sector;
 			switch (necessity)
 			{
 			case 1: // Saude
@@ -787,32 +797,37 @@ void BotIA::botBuild()
 			}
 			if (necessity == 4)
 			{
-				int size = BotCivilization->troops.size();
-				int qnt_array[4] = {0, 0, 0, 0};
-				int troop_necessited = 0;
-				for (int i = 0; i < size; i++)
-				{
-					qnt_array[BotCivilization->troops_kind.at(i)] += BotCivilization->troops_num.at(i);
-				}
-				for (int i = 0; i < 4; i++)
-				{
-					if (qnt_array[troop_necessited] < qnt_array[i])
-					{
-						troop_necessited = i;
-					}
-				}
-				size = medieval_buildings.at(build_sector).size();
+				int size = medieval_buildings.at(build_sector).size();
 				vector<int> buildings_pos;
-				for (int i = size - 1; i >= pos_in_array; i -= 1)
+				int troop_type = rand() % 3;
+				int quantity;
+				if (troop_type == 0)
 				{
-					if (medieval_buildings.at(build_sector).at(i).troops_kind == troop_necessited)
-					{
-						Buildings *actual_building = &medieval_buildings.at(build_sector).at(i);
-						if (unemployed >= actual_building->worker)
-							build = actual_building->buildConstruction(*BotCivilization);
-						if (build == 1)
-							break;
-					}
+					size = 0;
+					quantity = 18;
+				}
+				else if (troop_type == 1)
+				{
+					size = 18;
+					quantity = 18;
+				}
+				else if (troop_type == 2)
+				{
+					size = 36;
+					quantity = 9;
+				}
+				else if (troop_type == 3)
+				{
+					size = 45;
+					quantity = 9;
+				}
+				for (int i = pos_in_array + size + quantity; i >= pos_in_array + size; i -= 1)
+				{
+					Buildings *actual_building = &medieval_buildings.at(build_sector).at(i);
+					if (unemployed >= actual_building->worker)
+						build = actual_building->buildConstruction(*BotCivilization);
+					if (build == 1)
+						break;
 				}
 			}
 			else
