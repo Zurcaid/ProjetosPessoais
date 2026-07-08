@@ -8,30 +8,42 @@ using namespace std;
 
 string player_input, input1, input2, input3;
 
-vector<vector<King>> kings = {{ProphesiedKing, KingOfKings, Conqueror}, {GodEmperor, ChosenOne, BringerOfLight}, {NamelessGodOfEvil, VampireLord, DemonKing}, {WorldEater, PerfectBeing, KingOverHeaven}, {MonarchOfIllusions, LordOfShadows, StrongestSorcerer}, {SithLord, Android, EmperorOfSteel}, {IA, MonsterKing, ManInTheSuit, PerfectHomunculus}};
+vector<vector<King>> kings = {{NoviceKing, ProphesiedKing, KingOfKings, Conqueror, GodEmperor, BringerOfLight, Tyrant, Wise, Undying, IronFist, Golden, Exiled, MadKing, DragonBorn, TheJust, Cruel, YoungLion, OldOak, Bloodstained, Saint, SeaLord}};
 
-vector<vector<Champions>> commanders = {{MiyamotoMusashi, Spartacus}, {JonathanJoestar, FatherMozgus}, {PyramidHead}, {Indra}, {Miraak}, {Ghostrunner}, {Hunter}};
+vector<vector<Champions>> commanders = {{MiyamotoMusashi, Spartacus}};
 
-vector<vector<Troops>> soldier = {{Knight_1, Archer_1, Shielder_1, Horse_1}, {Cleric_1, HolyArcher_1, Paladin_1, Falcon_1}, {Goblin_1, RangedGoblin_1, Slime_1, Bat_1}, {Believer_1, ArcherBeliever_1, Penitent_1, ElementalSpirit_1}, {Summon_1, Mage_1, Caster_1, WolfSummon_1}, {Droid_1, RangedDroid_1, Barrier_1, Drone_1}, {Parasite_1, Bacteria_1, Flesh_1, ZombieWolf_1}};
+vector<vector<Troops>> soldier = {{Knight_1, Archer_1, Shielder_1, Horse_1}};
 
 vector<vector<Troops>> medieval_troops = {{}, {}, {}, {}};
 vector<vector<Buildings>> medieval_buildings = {{}, {}, {}};
 
 vector<vector<Buildings>> constructions = {{}, {}, {}, {}, {}, {}, {}, {}};
 
-vector<Civilization> botCivilizations;
-vector<BotIA> NPCs;
+vector<Civilization> allCivilizations;
+vector<BotIA> botManagement;
 
 // Funcoes relativas ao gerenciamento da cidade
-//a=kind,b=king;c=dist_x;d=dist_y
-Civilization::Civilization(int a, int b, int c, int d, int e = 1000)
+// a=kind,b=king;c=dist_x;d=dist_y
+Civilization::Civilization(int a, int b, int c, int d)
 {
 	kind = a;
 	king = b;
 	dist_x = c;
 	dist_y = d;
-	identifier = e;
-	alignment = kings.at(a).at(b).alignment;
+	identifier = rand() % std::numeric_limits<unsigned int>::max();
+	alignment = 50; // kings.at(a).at(b).alignment;
+}
+
+Civilization *findCivilization(int id)
+{
+	for (int i = 0; i < allCivilizations.size(); i++)
+	{
+		if (allCivilizations.at(i).identifier == id)
+		{
+			return &allCivilizations.at(i);
+		}
+	}
+	return nullptr;
 }
 
 void Civilization::setTroops(int x, int k, int n)
@@ -136,7 +148,12 @@ void Civilization::monthlyUpdates()
 
 void Civilization::defineEmperor()
 {
-	*Emperor = kings.at(kind).at(king);
+	// emperor_titles.push_back(kings.at(kind).at(king));
+}
+
+void Civilization::addEmperorTitle(int index)
+{
+	emperor_titles.push_back(kings.at(0).at(index));
 }
 
 void Civilization::exploreDirection(int a)
@@ -165,7 +182,7 @@ void Civilization::addNationKnown()
 	int found_x, found_y;
 	for (int i = 0; i < size; i++)
 	{
-		Civilization act_civil = nations_unknown.at(i);
+		Civilization act_civil = *findCivilization(nations_unknown.at(i));
 		if ((dist_x == act_civil.dist_x) and (dist_y == act_civil.dist_y))
 		{
 			continue;
@@ -197,13 +214,20 @@ void Civilization::addNationKnown()
 		}
 	}
 }
+
 void Civilization::setNationsUnknown()
 {
-	nations_unknown = botCivilizations;
+	for (int i = 0; i < allCivilizations.size(); i++)
+	{
+		if (allCivilizations.at(i).identifier != identifier)
+		{
+			nations_unknown.push_back(allCivilizations.at(i).identifier);
+		}
+	}
 }
 
 // Funcoes relativas ao gerenciamento de reis
-//a=kingdom,b=age,c=max_age,d=hp,e=dmg,f=alignment,g=troop_capacity,h=name;
+// a=kingdom,b=age,c=max_age,d=hp,e=dmg,f=alignment,g=troop_capacity,h=name;
 King::King(int a, int b, int c, int d, int e, int f, int g, string h)
 {
 	name = h;
@@ -237,13 +261,16 @@ Champions::Champions(int a, int b, int c, int d, int e, int f, int g, int h, int
 	moral_boost = n;
 	alignment = o;
 }
+
 void Champions::changeXp(int x)
 {
 	xp += x;
 }
+
 void Champions::raid(Civilization Obj1)
 {
 }
+
 void Champions::monthlyUpdate(Civilization Obj1)
 {
 	lvl = (xp / 100) + 1;
@@ -330,7 +357,7 @@ void setupTroops()
 	}
 }
 
-//Funcoes relativas ao gerenciamento de exercitos
+// Funcoes relativas ao gerenciamento de exercitos
 Army::Army(Champions leader, int leader_row, int moral, Troops row1, int row1_qnt, Troops row2, int row2_qnt, Troops row3, int row3_qnt)
 {
 	float moral_inc = (moral / 100) * (leader.moral_boost / 100);
@@ -475,7 +502,8 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
 
 int Buildings::buildConstruction(Civilization &Obj)
 {
-	if((Obj.money > cost) and (Obj.wood > wood_cost) and (Obj.stone > stone_cost) and (Obj.steel > steel_cost)){
+	if ((Obj.money > cost) and (Obj.wood > wood_cost) and (Obj.stone > stone_cost) and (Obj.steel > steel_cost))
+	{
 		float food_necessity = Obj.population / ((Obj.food * 2) + Obj.raw_food + Obj.population);
 		float health_necessity = Obj.population / ((Obj.health * 4) + Obj.population);
 		Obj.money -= cost;
@@ -490,10 +518,13 @@ int Buildings::buildConstruction(Civilization &Obj)
 		if ((sector == 3) and (type_id == 2))
 			Obj.aproval += 15 * health_necessity;
 		return 1;
-	}else{
+	}
+	else
+	{
 		return 0;
 	}
 }
+
 void Buildings::monthlyUpdate(Civilization &Obj)
 {
 	int storage;
@@ -604,25 +635,29 @@ void BotIA::botBuild()
 	}
 
 	float troop_necessity = ((population / lvl) / (war_power));
-	float gear_necessity = ((troop_necessity*lvl*BotCivilization->tech_lvl)/2) / BotCivilization->gear;
+	float gear_necessity = ((troop_necessity * lvl * BotCivilization->tech_lvl) / 2) / BotCivilization->gear;
 	float cost_necessity = food_necessity + health_necessity + troop_necessity + gear_necessity;
-	float stone_necessity = (cost_necessity*2*lvl) / BotCivilization->stone;
+	float stone_necessity = (cost_necessity * 2 * lvl) / BotCivilization->stone;
 	float wood_necessity;
 	float steel_necessity;
-	if(BotCivilization->tech_lvl <= 10){
+	if (BotCivilization->tech_lvl <= 10)
+	{
 		wood_necessity = (cost_necessity * 2 * lvl) / BotCivilization->wood;
 		steel_necessity = ((gear_necessity * lvl * BotCivilization->tech_lvl) / 2) / BotCivilization->steel;
-	}else{
-		wood_necessity = ((cost_necessity-troop_necessity)-gear_necessity) / BotCivilization->wood;
+	}
+	else
+	{
+		wood_necessity = ((cost_necessity - troop_necessity) - gear_necessity) / BotCivilization->wood;
 		steel_necessity = (((cost_necessity * lvl * BotCivilization->tech_lvl) + (gear_necessity * lvl * BotCivilization->tech_lvl) / 2)) / BotCivilization->steel;
 	}
 	cost_necessity += stone_necessity + steel_necessity + wood_necessity;
-	float money_necessity = (cost_necessity*lvl*BotCivilization->tech_lvl) / BotCivilization->money;
+	float money_necessity = (cost_necessity * lvl * BotCivilization->tech_lvl) / BotCivilization->money;
 
 	vector<float> necessities = {food_necessity, health_necessity, tech_necessity, chem_necessity, troop_necessity, gear_necessity, stone_necessity, wood_necessity, steel_necessity, money_necessity};
 	size = necessities.size();
 	vector<int> order;
-	for(int i1 = 0; i1 < size; i1++){
+	for (int i1 = 0; i1 < size; i1++)
+	{
 		int necessity = necessities.at(i1);
 		if (i1 == 0)
 		{
@@ -641,95 +676,112 @@ void BotIA::botBuild()
 			}
 		}
 	}
-	for(int i1 = 0; i1 < 3; i1++){
+	for (int i1 = 0; i1 < 3; i1++)
+	{
 		int unemployed = (population - BotCivilization->worker) - BotCivilization->criminal;
 		int build = 0;
 		int necessity = order.at(i1);
-		if(necessity == 0){ // Comida
-			for(int i2 = 4; i2 >= 0; i2 -= 1){
-				Buildings* actual_building = &medieval_buildings.at(1).at(i2);
-				if(BotCivilization->raw_food > actual_building->raw_food){
-					if(unemployed > actual_building->worker)
-						build = actual_building->buildConstruction(*BotCivilization);
-				}else{
-					actual_building = &medieval_buildings.at(0).at(i2);
-					if(unemployed > actual_building->worker)
+		if (necessity == 0)
+		{ // Comida
+			for (int i2 = 4; i2 >= 0; i2 -= 1)
+			{
+				Buildings *actual_building = &medieval_buildings.at(1).at(i2);
+				if (BotCivilization->raw_food > actual_building->raw_food)
+				{
+					if (unemployed > actual_building->worker)
 						build = actual_building->buildConstruction(*BotCivilization);
 				}
-				if(build == 1)
+				else
+				{
+					actual_building = &medieval_buildings.at(0).at(i2);
+					if (unemployed > actual_building->worker)
+						build = actual_building->buildConstruction(*BotCivilization);
+				}
+				if (build == 1)
 					break;
 			}
 		}
-		else{
+		else
+		{
 			int pos_in_array, build_sector;
-			switch (necessity){
-				case 1: // Saude
-					pos_in_array = 5;
-					build_sector = 2;
-					break;
-				case 2: // tecnologia
-					pos_in_array = 25;
-					build_sector = 1;
-					break;
-				case 3: // Produtos quimicos
-					pos_in_array = 10;
-					build_sector = 1;
-					break;
-				case 4: // Tropas
-					// Para tropas a configuracao e diferente
-					pos_in_array = 20;
-					build_sector = 2;
-					break;
-				case 5: // Equipamento
-					pos_in_array = 15;
-					build_sector = 1;
-					break;
-				case 6: // Pedra
-					pos_in_array = 10;
-					build_sector = 0;
-					break;
-				case 7: // Madeira
-					pos_in_array = 5;
-					build_sector = 0;
-					break;
-				case 8:	// Metal
-					pos_in_array = 5;
-					build_sector = 1;
-					break;
-				case 9: // Dinheiro
-					pos_in_array = 0;
-					build_sector = 2;
-					break;
+			switch (necessity)
+			{
+			case 1: // Saude
+				pos_in_array = 5;
+				build_sector = 2;
+				break;
+			case 2: // tecnologia
+				pos_in_array = 25;
+				build_sector = 1;
+				break;
+			case 3: // Produtos quimicos
+				pos_in_array = 10;
+				build_sector = 1;
+				break;
+			case 4: // Tropas
+				// Para tropas a configuracao e diferente
+				pos_in_array = 20;
+				build_sector = 2;
+				break;
+			case 5: // Equipamento
+				pos_in_array = 15;
+				build_sector = 1;
+				break;
+			case 6: // Pedra
+				pos_in_array = 10;
+				build_sector = 0;
+				break;
+			case 7: // Madeira
+				pos_in_array = 5;
+				build_sector = 0;
+				break;
+			case 8: // Metal
+				pos_in_array = 5;
+				build_sector = 1;
+				break;
+			case 9: // Dinheiro
+				pos_in_array = 0;
+				build_sector = 2;
+				break;
 			}
-			if(necessity == 4){
+			if (necessity == 4)
+			{
 				int size = BotCivilization->troops.size();
-				int qnt_array[4] = {0,0,0,0};
+				int qnt_array[4] = {0, 0, 0, 0};
 				int troop_necessited;
-				for(int i = 0; i < size; i++){
+				for (int i = 0; i < size; i++)
+				{
 					qnt_array[BotCivilization->troops_kind.at(i)] += BotCivilization->troops_num.at(i);
 				}
-				for(int i = 0; i < 4; i++){
-					if(qnt_array[troop_necessited] < qnt_array[i]){
+				for (int i = 0; i < 4; i++)
+				{
+					if (qnt_array[troop_necessited] < qnt_array[i])
+					{
 						troop_necessited = i;
 					}
 				}
 				size = medieval_buildings.at(build_sector).size();
 				vector<int> buildings_pos;
-				for(int i = size-1; i >= pos_in_array; i -= 1){
-					if(medieval_buildings.at(build_sector).at(i).troops_kind == troop_necessited){
-						Buildings* actual_building = &medieval_buildings.at(build_sector).at(i);
-						if(unemployed >= actual_building->worker)
+				for (int i = size - 1; i >= pos_in_array; i -= 1)
+				{
+					if (medieval_buildings.at(build_sector).at(i).troops_kind == troop_necessited)
+					{
+						Buildings *actual_building = &medieval_buildings.at(build_sector).at(i);
+						if (unemployed >= actual_building->worker)
 							build = actual_building->buildConstruction(*BotCivilization);
-						if(build == 1)
+						if (build == 1)
 							break;
 					}
 				}
-			}else{
-				for(int i3 = (pos_in_array+4); i3 >= (pos_in_array); i3 -= 1){
-					Buildings* actual_building = &medieval_buildings.at(build_sector).at(i3);
-					if(unemployed >= actual_building->worker)
+			}
+			else
+			{
+				for (int i3 = (pos_in_array + 4); i3 >= (pos_in_array); i3 -= 1)
+				{
+					Buildings *actual_building = &medieval_buildings.at(build_sector).at(i3);
+					if (unemployed >= actual_building->worker)
 						build = actual_building->buildConstruction(*BotCivilization);
-					if(build == 1)
+					if (build == 1)
 						break;
 				}
 			}
@@ -744,6 +796,7 @@ void BotIA::botTurn()
 	BotCivilization->exploreDirection(random1);
 
 	// Fase de construcao
+	botBuild();
 }
 
 // Funcoes relativas ao andamento do jogo
@@ -774,6 +827,9 @@ int beginGame()
 
 void startNewPlayer()
 {
+	difficulty = 1;
+	style = 1;
+	allCivilizations.push_back(PlayerKingdom);
 	while (!difficulty)
 	{
 		cout << end_of_page;
@@ -881,51 +937,63 @@ void startNewPlayer()
 	}
 }
 
-void generateOtherCivilizations()
+void generateOtherCivilizations() // preciso refazer o estilo de configuracao de reis
 {
 	int count = 0;
-	int size1 = kings.size(); // Quantidade de estilos de civilizacao
-	int possible_kinds[7][4];
-	for (int i1 = 0; i1 < size1; i1++)
+	int size1 = 100; // Quantidade de civilizacoes para criar
+	for (int i = 0; i < size1; i++)
 	{
-		int size2 = kings.at(i1).size();
-		for (int i2 = 0; i2 < size2; i2++)
+		int x = (rand() % 10000) - 5000;
+		while (x == 0)
 		{
-			possible_kinds[i1][i2] = 1;
+			x = (rand() % 10000) - 5000;
 		}
+		int y = (rand() % 3000) - 1500;
+		allCivilizations.emplace_back(0, 0, x, y);
+		allCivilizations.at(i).addEmperorTitle(0);
 	}
-	possible_kinds[PlayerKingdom.kind][PlayerKingdom.king] = 0;
-	if (style == 1)
-		size1 = 1;
-	for (int i1 = 0; i1 < size1; i1++)
-	{
-		int size2 = kings.at(i1).size();
-		for (int i2 = 0; i2 < size2; i2++)
-		{
-			if (possible_kinds[i1][i2] != 1)
-			{
-				continue;
-			}
-			if (difficulty == 1)
-			{
-				int x = (rand() % 10000) - 5000;
-				while (x == 0)
-				{
-					x = (rand() % 10000) - 5000;
-				}
-				int y = (rand() % 3000) - 1500;
-				Civilization KingdomNPC(i1, i2, x, y, count);
-				KingdomNPC.defineEmperor();
-				botCivilizations.push_back(KingdomNPC);
-				count++;
-			}
-		}
-	}
-	int size = botCivilizations.size();
+
+	int size = allCivilizations.size();
 	for (int i = 0; i < size; i++)
 	{
-		botCivilizations.at(i).setNationsUnknown();
+		allCivilizations.at(i).setNationsUnknown();
 	}
+	// kings.size(); // Quantidade de estilos de civilizacao
+	// int possible_kinds[7][4]; // array com tamanho do numero antigo de possiveis tipos de reinos e reis
+	// for (int i1 = 0; i1 < size1; i1++)
+	// {
+	// 	int size2 = kings.at(i1).size(); // Quantidade de reis por civilizacao
+	// 	for (int i2 = 0; i2 < size2; i2++)
+	// 	{
+	// 		possible_kinds[i1][i2] = 1;
+	// 	}
+	// }
+	// if (style == 1) // caso apenas medieval, define tamanho das civilizacoes como 1
+	// 	size1 = 1;
+	// for (int i1 = 0; i1 < size1; i1++) // faz um for para todos os estilos de civilizacao
+	// {
+	// 	int size2 = kings.at(i1).size(); // calcula de novo a quantidade de reis por algum motivo
+	// 	for (int i2 = 0; i2 < size2; i2++) // faz um for para todos os tipos de reis
+	// 	{
+	// 		if (possible_kinds[i1][i2] != 1)
+	// 		{
+	// 			continue;
+	// 		}
+	// 		if (difficulty == 1)
+	// 		{
+	// 			int x = (rand() % 10000) - 5000;
+	// 			while (x == 0)
+	// 			{
+	// 				x = (rand() % 10000) - 5000;
+	// 			}
+	// 			int y = (rand() % 3000) - 1500;
+	// 			Civilization KingdomNPC(i1, i2, x, y, count);
+	// 			KingdomNPC.defineEmperor();
+	// 			botCivilizations.push_back(KingdomNPC);
+	// 			count++;
+	// 		}
+	// 	}
+	// }
 }
 
 void startNPCS()
@@ -948,25 +1016,38 @@ void worldLog()
 
 // Codigo para funcoes: 0 - Falha; 1 - Funcionamento normal; >100: Informacao nos ultimos dois digitos
 
-int playerExplore(){
+int playerExplore()
+{
 	cout << "Select a direction to send explorers:\n1 - North\n2 - South\n3 - East\n 4 - West\nAny other thing to cancel\nYour choice: ";
 	cin >> player_input;
-	if((player_input == "1") and (PlayerKingdom.explored_n >= 5000)){
+	if ((player_input == "1") and (PlayerKingdom.explored_n >= 5000))
+	{
 		cout << "\nExplorer sent successfully.";
 		return 101;
-	}else if((player_input == "2") and (PlayerKingdom.explored_s >= 5000)){
+	}
+	else if ((player_input == "2") and (PlayerKingdom.explored_s >= 5000))
+	{
 		cout << "\nExplorer sent successfully.";
 		return 102;
-	}else if((player_input == "3") and (PlayerKingdom.explored_e >= 5000)){
+	}
+	else if ((player_input == "3") and (PlayerKingdom.explored_e >= 5000))
+	{
 		cout << "\nExplorer sent successfully.";
 		return 103;
-	}else if((player_input == "4") and (PlayerKingdom.explored_w >= 5000)){
+	}
+	else if ((player_input == "4") and (PlayerKingdom.explored_w >= 5000))
+	{
 		cout << "\nExplorer sent successfully.";
 		return 104;
-	}else{
-		if((player_input != "1") and (player_input != "2") and  (player_input != "3") and  (player_input != "4")){
+	}
+	else
+	{
+		if ((player_input != "1") and (player_input != "2") and (player_input != "3") and (player_input != "4"))
+		{
 			cout << "\nNo option selected.";
-		}else{
+		}
+		else
+		{
 			cout << "\nYou have already reached the border of the island in this direction.";
 		}
 		return 0;
@@ -978,7 +1059,6 @@ void playerTurn()
 	int alreadyExplored, directionToExplore, buildingsMade;
 	worldLog();
 	cout << "Kingdom: " << PlayerKingdom.civilization_name << "\n";
-	cout << "Actions: ";
+	cout << "Actions: \n 1 - Explore the world.\n2 - Build a construction.\n3 - Check kingdom status.\n4 - End turn.\nYour choice: ";
 	cin >> player_input;
 }
-

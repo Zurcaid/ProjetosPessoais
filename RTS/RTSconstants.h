@@ -11,9 +11,31 @@ class Champions;
 class King;
 class Army;
 
+class King
+{
+public:
+	string name;
+	int xp;
+	int lvl;
+	int kingdom;
+	int age, max_age;
+	int alignment, troop_capacity;
+	int hp = 10;
+	int dmg = 10;
+	// a=kingdom,b=age,c=max_age,d=hp,e=dmg, f=alignment,g=troop_capacity,h=name;
+	King(int a, int b, int c, int d, int e, int f, int g, string h);
+};
+
+class Empire
+{
+public:
+	int alignment;
+	string name;
+};
+
 class Civilization
 {
-  public:
+public:
 	// Caracteristicas gerais
 	int alignment; // Varia de 0 a 100
 	int xp = 0;	   // 1 lvl = 100 xp
@@ -21,15 +43,17 @@ class Civilization
 	float tech_lvl = 1.0;
 	int kind, king;
 	int dist_x, dist_y;
+	vector<King> emperor_titles;
+	Empire *Alliance;
 	King *Emperor;
 	string emperor_name, civilization_name;
-	int identifier;
+	unsigned int identifier;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
 	string name;
 
 	// Recursos
 	int money = 0;
-	int ores, wood, stone, raw_food;		 // Primarios
+	int ores, wood, stone, raw_food;  // Primarios
 	int gear, steel, chemicals, food; // Secundarios
 
 	// Construcoes
@@ -50,7 +74,7 @@ class Civilization
 
 	// Relacoes diplomaticas
 	vector<int> nations_known;
-	vector<Civilization> nations_unknown;
+	vector<int> nations_unknown;
 	vector<int> nk_relationship;
 	vector<int> pacts;
 	int trade_balance;
@@ -61,15 +85,15 @@ class Civilization
 	vector<Champions> champions;
 	vector<vector<Army>> armys; // Exercitos
 
-	vector<int> troops;		// Tropas no pais
-	vector<int> troops_kind;	// Tipo de tropa
-	vector<int> troops_num; // Quantidade de cada tropa
+	vector<int> troops;		 // Tropas no pais
+	vector<int> troops_kind; // Tipo de tropa
+	vector<int> troops_num;	 // Quantidade de cada tropa
 
-	//a=kind,b=king;c=dist_x;d=dist_y;
-	Civilization(int a, int b, int c, int d, int e);
-
+	// a=kind,b=king;c=dist_x;d=dist_y;
+	Civilization(int a, int b, int c, int d);
 	void changeAlignment(int x);
 	void defineEmperor();
+	void addEmperorTitle(int index);
 	void setTroops(int x, int k, int n);
 	void buildingsMonthlyUpdates();
 	void championsMonthlyUpdates();
@@ -80,24 +104,9 @@ class Civilization
 	void addNationKnown();
 };
 
-class King
-{
-  public:
-	string name;
-	int xp;
-	int lvl;
-	int kingdom;
-	int age, max_age;
-	int alignment, troop_capacity;
-	int hp = 10;
-	int dmg = 10;
-	//a=kingdom,b=age,c=max_age,d=hp,e=dmg, f=alignment,g=troop_capacity,h=name;
-	King(int a, int b, int c, int d, int e, int f, int g, string h);
-};
-
 class Champions
 {
-  public:
+public:
 	string name;
 	int kingdom;
 	int capacity;
@@ -118,7 +127,7 @@ class Champions
 
 class Troops
 {
-  public:
+public:
 	string name;
 	int kingdom;
 	int dmg, hp;
@@ -131,7 +140,7 @@ class Troops
 
 class Army
 {
-  public:
+public:
 	int champion_hp, champion_dmg, champion_row;
 	int row1_hp, row1_dmg, row1_ranged;
 	int row2_hp, row2_dmg, row2_ranged;
@@ -145,7 +154,7 @@ class Army
 
 class Buildings
 {
-  public:
+public:
 	string name;
 	int position;
 	int sector, type_id;
@@ -176,6 +185,7 @@ class Buildings
 
 class BotIA
 {
+public:
 	Civilization *BotCivilization;
 	King *BotKing;
 	BotIA(Civilization &Obj1, King &Obj2);

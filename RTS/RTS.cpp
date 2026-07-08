@@ -28,9 +28,16 @@ int main()
 		{
 			month = month - 12;
 			year += 1;
-	 	}
+		}
+
+		cout << "Teste";
 		playerTurn();
 		cin >> input;
+
+		for (int i = 0; i < botManagement.size(); i++)
+		{
+			botManagement.at(i).botTurn();
+		}
 	}
 	return 0;
 }
