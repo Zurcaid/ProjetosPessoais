@@ -10,6 +10,28 @@ string input;
 
 int main()
 {
+	setupTroops();
+	setupBuildings();
+	generateOtherCivilizations();
+	int dead_count = 0;
+	for (int j = 0; j < 120; j++)
+	{
+		for (int i = 0; i < botManagement.size(); i++)
+		{
+			if (botManagement.at(i).BotCivilization->alive)
+			{
+				cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
+				botManagement.at(i).botTurn();
+			}
+			else
+			{
+				dead_count += 1;
+			}
+		}
+		worldEvents();
+	}
+	cout << "Dead civilizations: " << dead_count / 120 << endl;
+
 	init_game = beginGame();
 	if (init_game == 1)
 	{
@@ -39,6 +61,22 @@ int main()
 		}
 
 		worldEvents();
+
+		// for (int j = 0; j < 120; j++)
+		// {
+		// 	month += 1;
+		// 	if (month >= 13)
+		// 	{
+		// 		month = month - 12;
+		// 		year += 1;
+		// 	}
+		// 	for (int i = 0; i < botManagement.size(); i++)
+		// 	{
+		// 		cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
+		// 		botManagement.at(i).botTurn();
+		// 	}
+		// 	worldEvents();
+		// }
 	}
 	return 0;
 }

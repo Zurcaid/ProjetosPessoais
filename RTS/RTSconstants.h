@@ -48,6 +48,7 @@ public:
 	King *Emperor;
 	string emperor_name, civilization_name;
 	unsigned int identifier;
+	int alive = 1;
 	// Kinds of kingdom: 0=Medieval,1=Light, 2=Darkness, 3=Deity, 4=Sorcerer, 5=Tech, 6=Biotech
 	string name;
 
@@ -175,7 +176,7 @@ public:
 	int grow_rate = 0;
 	int worker = 0, criminal = 0;
 	float aproval = 1.0;
-	int education = 0, health = 0;
+	float education = 0, health = 0;
 	int growing_rate = 0;
 
 	int troops_kind = 999;
@@ -194,6 +195,7 @@ public:
 	Civilization *BotCivilization;
 	BotIA(Civilization &Obj1);
 	void botBuild();
+	void botRepair();
 	void botTurn();
 };
 
