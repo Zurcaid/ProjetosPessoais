@@ -5,6 +5,7 @@ using namespace std;
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <limits>
 
 string player_input, input1, input2, input3;
 
@@ -257,6 +258,10 @@ void Civilization::report()
 	cout << "Buildings: ";
 	for (int i = 0; i < buildings.size(); i++)
 		cout << buildings.at(i).name << " | ";
+	cout << endl
+		 << "Troops: ";
+	for (int i = 0; i < troops.size(); i++)
+		cout << medieval_troops.at(troops_kind.at(i)).at(troops.at(i)).name << " | ";
 	cout << endl;
 	cout << end_of_page;
 }
@@ -521,7 +526,7 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
 			if (troops_remove != 999)
 				troops_remove = troop_rm;
 			gear -= qnt_rm;
-			troops_kind = troop_kind / 5;
+			troops_kind = troop_kind;
 			troops = troop_type;
 			troops_num = worker;
 			worker = (troops_num / 10) + 1;
@@ -546,7 +551,8 @@ int Buildings::buildConstruction(Civilization &Obj)
 		Obj.steel -= steel_cost;
 		Obj.worker += worker;
 		position += Obj.buildings.size();
-		Obj.buildings.push_back(*this);
+		Buildings Construction(tech_req, lvl_req, kingdom, sector, type_id, name, troops_kind, troops, troops_remove);
+		Obj.buildings.push_back(Construction);
 		if (((sector == 1) and (type_id == 1)) or ((sector == 2) and (type_id == 1)))
 			Obj.aproval += 20 * food_necessity;
 		if ((sector == 3) and (type_id == 2))
@@ -578,8 +584,10 @@ void Buildings::monthlyUpdate(Civilization &Obj)
 	Obj.wood += wood * integrity * Obj.lvl;
 	Obj.stone += stone * integrity * Obj.lvl;
 	Obj.raw_food += raw_food * integrity * Obj.lvl;
-	Obj.setTroops(troops, troops_kind, (troops_num * Obj.lvl));
-
+	if (troops_kind < 500)
+	{
+		Obj.setTroops(troops, troops_kind, (troops_num * Obj.lvl));
+	}
 	Obj.education += education / Obj.population;
 	if (Obj.education > 1)
 		Obj.education = 1.0;
@@ -666,8 +674,9 @@ void BotIA::botBuild()
 	float war_power = 0.1;
 	for (int i = 0; i < size; i++)
 	{
+		cout << i << endl;
 		int pos = BotCivilization->troops.at(i);
-		int kind = BotCivilization->troops_kind.at(i);
+		int kind = BotCivilization->troops_kind.at(i) - 1;
 		float troop_power = (medieval_troops.at(kind).at(pos).hp * medieval_troops.at(kind).at(pos).dmg) / 100;
 		war_power += troop_power * BotCivilization->troops_num.at(i);
 	}
@@ -852,10 +861,10 @@ void BotIA::botTurn()
 	int random1 = rand() % 4 + 1;
 	BotCivilization->exploreDirection(random1);
 	cout << "Bot [" << BotCivilization->identifier << "] explored direction: " << random1 << endl;
-
 	// Fase de construcao
-	botBuild();
+	// PROBLEMA NA FASE DE CONSTRUCAO
 
+	botBuild();
 	BotCivilization->report();
 }
 

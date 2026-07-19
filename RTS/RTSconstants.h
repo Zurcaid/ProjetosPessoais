@@ -178,7 +178,9 @@ public:
 	int education = 0, health = 0;
 	int growing_rate = 0;
 
-	int troops_kind, troops, troops_num;
+	int troops_kind = 999;
+	int troops = 999;
+	int troops_num;
 	int troops_remove;
 	// t1=tech_req,nvl=lvl_required,a=kingdom,b=sector,c=type_id, nm=name, troop_type=troops;
 	Buildings(float t1, int nvl, int a, int b, int c, string nm, int troop_kind, int troop_type, int troop_rm);
