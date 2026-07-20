@@ -2,6 +2,8 @@
 #include "RTSfunctions.h"
 #include "RTSfunctions.cpp"
 #include <iostream>
+#include <ctime>
+
 using namespace std;
 
 int month, init_game;
@@ -10,12 +12,13 @@ string input;
 
 int main()
 {
+	srand(time(0));
 	setupTroops();
 	setupBuildings();
 	generateOtherCivilizations();
-	int dead_count = 0;
-	for (int j = 0; j < 120; j++)
+	for (int j = 0; j < 6000; j++)
 	{
+		int dead_count = 0;
 		for (int i = 0; i < botManagement.size(); i++)
 		{
 			if (botManagement.at(i).BotCivilization->alive)
@@ -28,9 +31,9 @@ int main()
 				dead_count += 1;
 			}
 		}
+		cout << "Dead civilizations: " << dead_count << endl;
 		worldEvents();
 	}
-	cout << "Dead civilizations: " << dead_count / 120 << endl;
 
 	init_game = beginGame();
 	if (init_game == 1)

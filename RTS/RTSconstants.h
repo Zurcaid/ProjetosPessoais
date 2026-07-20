@@ -53,9 +53,9 @@ public:
 	string name;
 
 	// Recursos
-	int money = 100;
-	int ores = 0, wood = 100, stone = 100, raw_food = 100; // Primarios
-	int gear = 0, steel = 0, chemicals = 0, food = 0;	   // Secundarios
+	long int money = 100;
+	long int ores = 0, wood = 100, stone = 100, raw_food = 100; // Primarios
+	long int gear = 0, steel = 0, chemicals = 0, food = 0;		// Secundarios
 
 	// Construcoes
 	vector<Buildings> buildings;
@@ -70,6 +70,8 @@ public:
 	int students;
 	float education = 0.1;
 	float health = 0.1;
+	float health_increase = 0;
+	float education_increase = 0;
 	int war_prisoners;
 	vector<Champions> important_prisoners;
 
@@ -166,9 +168,9 @@ public:
 	int cost = 0;
 	int wood_cost = 0, stone_cost = 0, steel_cost = 0;
 	float integrity = 1;
-	int ores = 0, wood = 0, stone = 0, raw_food = 0;						   // Primarios
-	int products = 0, gear = 0, steel = 0, paper = 0, chemicals = 0, food = 0; // Secundarios
-	int money = 0;															   // Terciarios
+	int ores = 0, wood = 0, stone = 0, raw_food = 0;								// Primarios
+	long int products = 0, gear = 0, steel = 0, paper = 0, chemicals = 0, food = 0; // Secundarios
+	int money = 0;																	// Terciarios
 	float tech_req = 1.0;
 	int lvl_req = 1;
 	float degradation_rate = 0;
