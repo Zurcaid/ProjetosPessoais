@@ -119,7 +119,7 @@ void Civilization::monthlyUpdates()
 	if (education > 1)
 		education = 1.0;
 	if (health > 1)
-		health = 1;
+		health = 1.0;
 
 	championsMonthlyUpdates();
 	if ((food - population) < 0)
@@ -160,7 +160,7 @@ void Civilization::monthlyUpdates()
 		troop_qnt += troops_num.at(i);
 
 	storage1 = criminal;
-	criminal = (population / 10) / (troop_qnt * education + 1);
+	criminal = (population * lvl / 10) / (troop_qnt * education + 1);
 	population -= (criminal - storage1);
 
 	aproval += 50 * education;
@@ -198,19 +198,19 @@ void Civilization::exploreDirection(int a)
 {
 	if (a == 1)
 	{
-		explored_n += 200;
+		explored_n += 20;
 	}
 	else if (a == 2)
 	{
-		explored_s += 200;
+		explored_s += 20;
 	}
 	else if (a == 3)
 	{
-		explored_e += 200;
+		explored_e += 20;
 	}
 	else if (a == 4)
 	{
-		explored_w += 200;
+		explored_w += 20;
 	}
 }
 
@@ -290,8 +290,7 @@ void Civilization::report()
 	}
 	cout << rawfood_gen;
 
-	cout << "\tFood generation: ";
-	cout << food_gen << endl;
+	cout << "\tFood generation: " << food_gen << "\tNations known: " << nations_known.size() << endl;
 
 	// cout << "Buildings: ";
 	// for (int i = 0; i < troops.size(); i++)
@@ -721,13 +720,12 @@ void BotIA::botBuild()
 
 	int food_gen = 0;
 	int rawfood_gen = 0;
-	cout << "Raw food generation: ";
 	for (int i = 0; i < BotCivilization->buildings.size(); i++)
 	{
 		food_gen += BotCivilization->buildings.at(i).food * BotCivilization->buildings.at(i).integrity * lvl;
 		rawfood_gen += BotCivilization->buildings.at(i).raw_food * BotCivilization->buildings.at(i).integrity * lvl;
 	}
-	cout << food_gen << endl;
+	// cout << food_gen << endl;
 	float food_necessity = population * 10 / ((food_gen * 2) + rawfood_gen + 1);
 	float health_necessity = 1 - BotCivilization->health;
 	float tech_necessity = (((BotCivilization->money - (BotCivilization->money % 1000)) / 1000) / (BotCivilization->tech_lvl + 1)) * 0.25;
@@ -765,16 +763,16 @@ void BotIA::botBuild()
 	float money_necessity = 30 * (cost_necessity * lvl * BotCivilization->tech_lvl) / (BotCivilization->money + 1);
 	vector<float> necessities = {food_necessity, health_necessity, tech_necessity, chem_necessity, troop_necessity, gear_necessity, stone_necessity, wood_necessity, steel_necessity, money_necessity};
 	size = necessities.size();
-	cout << "Food necessity: " << food_necessity << endl;
-	cout << "Health necessity: " << health_necessity << endl;
-	cout << "Tech necessity: " << tech_necessity << endl;
-	cout << "Chemicals necessity: " << chem_necessity << endl;
-	cout << "Troop necessity: " << troop_necessity << endl;
-	cout << "Gear necessity: " << gear_necessity << endl;
-	cout << "Stone necessity: " << stone_necessity << endl;
-	cout << "Wood necessity: " << wood_necessity << endl;
-	cout << "Steel necessity: " << steel_necessity << endl;
-	cout << "Money necessity: " << money_necessity << endl;
+	// cout << "Food necessity: " << food_necessity << endl;
+	// cout << "Health necessity: " << health_necessity << endl;
+	// cout << "Tech necessity: " << tech_necessity << endl;
+	// cout << "Chemicals necessity: " << chem_necessity << endl;
+	// cout << "Troop necessity: " << troop_necessity << endl;
+	// cout << "Gear necessity: " << gear_necessity << endl;
+	// cout << "Stone necessity: " << stone_necessity << endl;
+	// cout << "Wood necessity: " << wood_necessity << endl;
+	// cout << "Steel necessity: " << steel_necessity << endl;
+	// cout << "Money necessity: " << money_necessity << endl;
 
 	vector<int> order;
 	for (int i1 = 0; i1 < size; i1++)
@@ -958,8 +956,8 @@ void BotIA::botTurn()
 	botBuild();
 	botRepair();
 
-	cout << "Bot [" << BotCivilization->identifier << "] explored direction: " << random1 << endl;
-	BotCivilization->report();
+	// cout << "Bot [" << BotCivilization->identifier << "] explored direction: " << random1 << endl;
+	// BotCivilization->report();
 }
 
 // Funcoes relativas ao andamento do jogo
@@ -1106,12 +1104,12 @@ void generateOtherCivilizations()
 	int size1 = 100; // Quantidade de civilizacoes para criar
 	for (int i = 0; i < size1; i++)
 	{
-		int x = (rand() % 10000) - 5000;
+		int x = (rand() % 100000) - 50000;
 		while (x == 0)
 		{
-			x = (rand() % 10000) - 5000;
+			x = (rand() % 100000) - 50000;
 		}
-		int y = (rand() % 3000) - 1500;
+		int y = (rand() % 100000) - 50000;
 		allCivilizations.emplace_back(0, 0, x, y);
 		allCivilizations.at(i).addEmperorTitle(0);
 	}

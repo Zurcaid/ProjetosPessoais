@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int month, init_game;
+int month = 0, init_game;
 int year = 1;
 string input;
 
@@ -16,14 +16,14 @@ int main()
 	setupTroops();
 	setupBuildings();
 	generateOtherCivilizations();
-	for (int j = 0; j < 6000; j++)
+	for (int j = 0; j < 120; j++)
 	{
 		int dead_count = 0;
 		for (int i = 0; i < botManagement.size(); i++)
 		{
 			if (botManagement.at(i).BotCivilization->alive)
 			{
-				cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
+				// cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
 				botManagement.at(i).botTurn();
 			}
 			else
@@ -31,8 +31,28 @@ int main()
 				dead_count += 1;
 			}
 		}
-		cout << "Dead civilizations: " << dead_count << endl;
+		// cout << "Dead civilizations: " << dead_count << endl;
 		worldEvents();
+		// month += 1;
+		// cout << "Date: Month " << month << " | Year " << year << " ... ";
+		// if (month >= 13)
+		// {
+		// 	month = month - 12;
+		// 	year += 1;
+		// }
+		cout << "Year: " << j / 12 << endl;
+	}
+	for (int i = 0; i < botManagement.size(); i++)
+	{
+		if (botManagement.at(i).BotCivilization->alive)
+		{
+			cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
+			botManagement.at(i).botTurn();
+			botManagement.at(i).BotCivilization->report();
+		}
+		else
+		{
+		}
 	}
 
 	init_game = beginGame();
@@ -48,18 +68,20 @@ int main()
 	while (1)
 	{
 		month += 1;
-		cout << "Date: Month " << month << " | Year " << year << " ... ";
 		if (month >= 13)
 		{
 			month = month - 12;
 			year += 1;
 		}
+		cout << "Date: Month " << month << " | Year " << year << " ... ";
 
 		playerTurn();
 
+		cout << "The world is moving..." << endl;
+
 		for (int i = 0; i < botManagement.size(); i++)
 		{
-			cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
+			// cout << "Bot [" << botManagement.at(i).BotCivilization->identifier << "] turn: \n";
 			botManagement.at(i).botTurn();
 		}
 
