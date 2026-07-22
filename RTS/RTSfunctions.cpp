@@ -7,6 +7,7 @@ using namespace std;
 #include <cstdlib>
 #include <limits>
 #include <math.h>
+#include <algorithm>
 
 string player_input, input1, input2, input3;
 
@@ -110,6 +111,7 @@ void Civilization::monthlyUpdates()
 	health_increase = 0;
 	education_increase = 0;
 	buildingsMonthlyUpdates();
+	championsMonthlyUpdates();
 
 	lvl = 1 + sqrt(population / 20) + (xp / 100);
 
@@ -121,7 +123,7 @@ void Civilization::monthlyUpdates()
 	if (health > 1)
 		health = 1.0;
 
-	championsMonthlyUpdates();
+	float prev_population = population;
 	if ((food - population) < 0)
 	{
 		storage1 = population - (food * 2);
@@ -139,6 +141,7 @@ void Civilization::monthlyUpdates()
 			if (population > 2)
 			{
 				population += population * health / (2 + (rand() % 4));
+				aproval += 50;
 			}
 		}
 	}
@@ -147,13 +150,18 @@ void Civilization::monthlyUpdates()
 		food -= population;
 		if (population > 2)
 		{
+			aproval += 50;
 			population += population * health / (2 + (rand() % 4));
 		}
 	}
+
+	growing_rate = prev_population / population;
+	// cout << prev_population << "\t" << population << endl;
+
 	if (education <= 0)
-		education = 0.1;
+		education = 0.001;
 	if (health <= 0)
-		health = 0.1;
+		health = 0.001;
 
 	int troop_qnt = 0;
 	for (int i = 0; i < troops.size(); i++)
@@ -198,19 +206,19 @@ void Civilization::exploreDirection(int a)
 {
 	if (a == 1)
 	{
-		explored_n += 20;
+		explored_n += 200;
 	}
 	else if (a == 2)
 	{
-		explored_s += 20;
+		explored_s += 200;
 	}
 	else if (a == 3)
 	{
-		explored_e += 20;
+		explored_e += 200;
 	}
 	else if (a == 4)
 	{
-		explored_w += 20;
+		explored_w += 200;
 	}
 }
 
@@ -218,51 +226,60 @@ void Civilization::addNationKnown()
 {
 	int size = nations_unknown.size();
 	int found_x, found_y;
-	for (int i = 1; i < size; i++)
+	int min_x = distance(nations_unknown_x.begin(), lower_bound(nations_unknown_x.begin(), nations_unknown_x.end(), -explored_w));
+	int max_x = distance(nations_unknown_x.begin(), upper_bound(nations_unknown_x.begin(), nations_unknown_x.end(), explored_e));
+
+	for (int i = min_x; i < max_x; i++)
 	{
-		Civilization act_civil = *findCivilization(nations_unknown.at(i));
-		if ((dist_x == act_civil.dist_x) and (dist_y == act_civil.dist_y))
-		{
-			continue;
-		}
-		if (dist_x >= act_civil.dist_x)
-		{
-			if ((dist_x - explored_w) < act_civil.dist_x)
-				found_x = 1;
-		}
-		else
-		{
-			if ((dist_x + explored_e) > act_civil.dist_x)
-				found_x = 1;
-		}
-		if (dist_y >= act_civil.dist_y)
-		{
-			if ((dist_y - explored_s) < act_civil.dist_y)
-				found_y = 1;
-		}
-		else
-		{
-			if ((dist_y + explored_n) > act_civil.dist_y)
-				found_y = 1;
-		}
-		if (found_x and found_y)
+		if ((nations_unknown_y.at(i) >= -explored_s) && (nations_unknown_y.at(i) <= explored_n))
 		{
 			nations_known.push_back(nations_unknown.at(i));
 			nations_unknown.erase(nations_unknown.begin() + i);
+			nations_unknown_x.erase(nations_unknown_x.begin() + i);
+			nations_unknown_y.erase(nations_unknown_y.begin() + i);
 			i--;
-			size--;
+			max_x--;
 		}
 	}
 }
 
 void Civilization::setNationsUnknown()
 {
-	for (int i = 0; i < allCivilizations.size(); i++)
+	vector<int> ordering_array;
+	int flag = 0;
+	ordering_array.push_back(0);
+	for (int i = 1; i < allCivilizations.size(); i++)
 	{
-		if (allCivilizations.at(i).identifier != identifier)
+		flag = 0;
+		if (allCivilizations.at(i).identifier == identifier)
 		{
-			nations_unknown.push_back(allCivilizations.at(i).identifier);
+			continue;
 		}
+		for (int j = ordering_array.size(); j > 0; j--)
+		{
+			if ((allCivilizations.at(i).dist_x > allCivilizations.at(ordering_array.at(j - 1)).dist_x))
+			{
+				if (j == ordering_array.size())
+				{
+					ordering_array.push_back(i);
+					flag = 1;
+					break;
+				}
+				ordering_array.insert(ordering_array.begin() + j, i);
+				flag = 1;
+				break;
+			}
+		}
+		if (flag == 0)
+		{
+			ordering_array.insert(ordering_array.begin(), i);
+		}
+	}
+	for (int i = 0; i < ordering_array.size(); i++)
+	{
+		nations_unknown.push_back(allCivilizations.at(ordering_array.at(i)).identifier);
+		nations_unknown_x.push_back(allCivilizations.at(ordering_array.at(i)).dist_x);
+		nations_unknown_y.push_back(allCivilizations.at(ordering_array.at(i)).dist_y);
 	}
 }
 
@@ -279,7 +296,7 @@ void Civilization::report()
 	cout << "\tBuildings: " << buildings.size() << endl;
 	cout << "Money: " << money << "\tWood: " << wood << "\tStone: " << stone << "\tRaw Food: " << raw_food << endl;
 	cout << "Food: " << food << "\tSteel: " << steel << "\tChemicals: " << chemicals << "\tGear: " << gear << endl;
-	cout << "Education: " << education << "\tHealth: " << health << "\tApproval: " << aproval << " Growth rate:" << growing_rate << endl;
+	cout << "Education: " << education << "\tHealth: " << health << "\tApproval: " << aproval << "\tGrowth rate: " << growing_rate << endl;
 	int rawfood_gen = 0;
 	int food_gen = 0;
 	cout << "Raw food generation: ";
@@ -543,6 +560,7 @@ Buildings::Buildings(float t1, int nvl, int a, int b, int c, string nm, int troo
 			chemicals = qnt_rm / 2;
 			money = qnt_rm;
 			tech_gen = (gen * 2) / (100 * lvl_req);
+			education = gen;
 			break;
 		}
 	}
@@ -1101,7 +1119,7 @@ void startNewPlayer()
 void generateOtherCivilizations()
 {
 	int count = 0;
-	int size1 = 100; // Quantidade de civilizacoes para criar
+	int size1 = 1000; // Quantidade de civilizacoes para criar
 	for (int i = 0; i < size1; i++)
 	{
 		int x = (rand() % 100000) - 50000;

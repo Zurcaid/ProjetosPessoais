@@ -78,6 +78,8 @@ public:
 	// Relacoes diplomaticas
 	vector<int> nations_known;
 	vector<int> nations_unknown;
+	vector<int> nations_unknown_x;
+	vector<int> nations_unknown_y;
 	vector<int> nk_relationship;
 	vector<int> pacts;
 	int trade_balance;
